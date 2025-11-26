@@ -511,6 +511,31 @@ class Security_Controller extends App_Controller {
         }
     }
 
+    protected function can_delete_projects($project_id = 0) {
+        if ($this->login_user->user_type == "staff") {
+            if ($this->can_manage_all_projects()) {
+                return true;
+            }
+
+            $can_delete_projects = get_array_value($this->login_user->permissions, "can_delete_projects");
+            $can_delete_only_own_created_projects = get_array_value($this->login_user->permissions, "can_delete_only_own_created_projects");
+
+            if ($can_delete_projects) {
+                return true;
+            }
+
+            if ($project_id) {
+                $project_info = $this->Projects_model->get_one($project_id);
+                if ($can_delete_only_own_created_projects && $project_info->created_by === $this->login_user->id) {
+                    return true;
+                }
+            } else if ($can_delete_only_own_created_projects) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected function get_user_options_for_query($only_type = "") {
         /*
          * team members can send message to all team members/can't send to any member/can send to specific members
