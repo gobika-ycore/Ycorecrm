@@ -1090,6 +1090,62 @@ class Security_Controller extends App_Controller {
         }
     }
 
+    protected function can_view_gantt() {
+        if ($this->login_user->user_type == "staff") {
+            if ($this->can_manage_all_projects()) {
+                return true;
+            } else {
+                // allow if the user is a member of the project
+                return $this->is_user_a_project_member;
+            }
+        } else {
+            // clients can view gantt if enabled and it is their project
+            if (get_setting("client_can_view_gantt")) {
+                return $this->is_clients_project;
+            }
+        }
+    }
+
+    protected function can_view_files() {
+        if ($this->login_user->user_type == "staff") {
+            if ($this->can_manage_all_projects()) {
+                return true;
+            } else {
+                // allow if the user is a member of the project
+                return $this->is_user_a_project_member;
+            }
+        } else {
+            // clients can view files if enabled and it is their project
+            if (get_setting("client_can_view_files")) {
+                return $this->is_clients_project;
+            }
+        }
+    }
+
+    protected function can_add_remove_project_members() {
+        if ($this->login_user->user_type == "staff") {
+            // Admins / manage-all-projects can manage members; otherwise only members can manage if app grants
+            if ($this->can_manage_all_projects()) {
+                return true;
+            } else {
+                return $this->is_user_a_project_member;
+            }
+        }
+        return false;
+    }
+
+    protected function can_comment_on_projects() {
+        if ($this->login_user->user_type == "staff") {
+            // Staff can comment if they can manage all projects or are project members
+            return $this->can_manage_all_projects() ? true : $this->is_user_a_project_member;
+        } else {
+            // Clients can comment if allowed by settings and it's their project
+            if (get_setting("client_can_comment_on_projects")) {
+                return $this->is_clients_project;
+            }
+        }
+    }
+
     protected function show_own_estimates_only_user_id() {
         if ($this->login_user->user_type === "staff") {
             return get_array_value($this->login_user->permissions, "estimate") == "own" ? $this->login_user->id : false;

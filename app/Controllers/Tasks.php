@@ -689,11 +689,17 @@ class Tasks extends Security_Controller {
 
         //get milestone dropdown
         $milestones_dropdown = array(array("id" => "", "text" => "-"));
+
+        // Always load milestones from the milestones table (deleted = 0)
+        // If context is project and a specific project is selected, filter by that project_id.
+        $milestone_options = array("deleted" => 0);
         if ($context == "project" && $context_id) {
-            $milestones = $this->Milestones_model->get_details(array("project_id" => $context_id, "deleted" => 0))->getResult();
-            foreach ($milestones as $milestone) {
-                $milestones_dropdown[] = array("id" => $milestone->id, "text" => $milestone->title);
-            }
+            $milestone_options["project_id"] = $context_id;
+        }
+
+        $milestones = $this->Milestones_model->get_details($milestone_options)->getResult();
+        foreach ($milestones as $milestone) {
+            $milestones_dropdown[] = array("id" => $milestone->id, "text" => $milestone->title);
         }
 
         //get project members and collaborators dropdown

@@ -77,8 +77,11 @@
     load_css($css_files);
 
     load_js(array(
+        // Feather icons must be loaded before app scripts that call feather.replace()
+        "assets/js/feather-icons/feather.min.js",
         "assets/js/app.all.js"
     ));
+
     ?>
 
     <?php echo view("includes/csrf_ajax"); ?>

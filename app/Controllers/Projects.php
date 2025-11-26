@@ -11,9 +11,66 @@ class Projects extends Security_Controller {
     use Excel_import;
     use App_folders;
 
+    protected $Project_settings_model;
+
+    public function __construct() {
+        parent::__construct();
+        $this->Project_settings_model = model('App\Models\Project_settings_model');
+    }
+
     /* load project view */
     function index() {
         app_redirect("projects/all_projects");
+    }
+
+    /* add/edit project modal */
+    function modal_form() {
+        $this->validate_submitted_data(array(
+            "id" => "numeric"
+        ));
+
+        $id = $this->request->getPost('id');
+
+        if ($id) {
+            if (!$this->can_edit_projects($id)) {
+                app_redirect("forbidden");
+            }
+        } else {
+            if (!$this->can_create_projects()) {
+                app_redirect("forbidden");
+            }
+        }
+
+        $view_data['model_info'] = $this->Projects_model->get_one($id);
+
+        // statuses (view expects variable name 'statuses')
+        $view_data['statuses'] = $this->Project_status_model->get_details()->getResult();
+
+        // labels for select2
+        $view_data['label_suggestions'] = $this->make_labels_dropdown("project", $view_data['model_info']->labels);
+
+        // context (estimate/order/proposal) passthrough for save()
+        $view_data['context'] = $this->request->getPost('context');
+        $view_data['context_id'] = $this->request->getPost('context_id');
+
+        // client handling
+        $client_id = $this->request->getPost('client_id');
+        if (!$client_id && $id) {
+            $client_id = $view_data['model_info']->client_id;
+        }
+        $view_data['client_id'] = $client_id ? $client_id : 0;
+
+        // show/hide clients dropdown based on access
+        $view_data['hide_clients_dropdown'] = !$this->can_access_clients(true);
+        $view_data['clients_dropdown'] = $this->Clients_model->get_dropdown_list(array("company_name"), "id", array("is_lead" => 0));
+
+        // custom fields
+        $view_data['custom_fields'] = $this->Custom_fields_model->get_combined_details("projects", $id, $this->login_user->is_admin, $this->login_user->user_type)->getResult();
+
+        // flag used by footer buttons
+        $view_data['can_edit_projects'] = $this->can_edit_projects($id);
+
+        return $this->template->view('projects/modal_form', $view_data);
     }
 
     function all_projects($status_id = 0) {
@@ -3465,7 +3522,7 @@ class Projects extends Security_Controller {
         }
     }
 
-    private function can_comment_on_projects() {
+    protected function can_comment_on_projects() {
         if ($this->login_user->user_type == "staff") {
             if ($this->can_manage_all_projects() || get_array_value($this->login_user->permissions, "can_comment_on_projects")) {
                 return true;
