@@ -29,4 +29,36 @@ class Services extends BaseService
      *     return new \CodeIgniter\Example();
      * }
      */
+
+    // Workaround for environments where config('App') may return null.
+    // Ensure the SiteURIFactory always receives a valid \Config\App instance.
+    public static function siteurifactory(
+        ?\Config\App $config = null,
+        ?\CodeIgniter\Superglobals $superglobals = null,
+        bool $getShared = true
+    ) {
+        if ($getShared) {
+            return static::getSharedInstance('siteurifactory', $config, $superglobals);
+        }
+
+        $config = $config ?? new \Config\App();
+        $superglobals = $superglobals ?? \CodeIgniter\Config\Services::get('superglobals');
+
+        return new \CodeIgniter\HTTP\SiteURIFactory($config, $superglobals);
+    }
+
+    public static function uri(?string $uri = null, bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('uri', $uri);
+        }
+
+        if ($uri === null) {
+            $appConfig = new \Config\App();
+            $factory = static::siteurifactory($appConfig, \CodeIgniter\Config\Services::get('superglobals'));
+            return $factory->createFromGlobals();
+        }
+
+        return new \CodeIgniter\HTTP\URI($uri);
+    }
 }

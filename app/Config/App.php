@@ -64,7 +64,8 @@ class App extends BaseConfig {
      *
      * @var string
      */
-    public $baseURL = '';
+    // app/Config/App.php
+public string $baseURL = 'http://localhost/crm/';
     
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
