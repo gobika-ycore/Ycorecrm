@@ -44,6 +44,70 @@ class Projects extends Security_Controller {
         }
     }
 
+    /* load project add/edit modal */
+
+    function modal_form() {
+        $this->validate_submitted_data(array(
+            "id" => "numeric"
+        ));
+
+        $project_id = $this->request->getPost('id');
+
+        //initialize permission context when editing an existing project
+        if ($project_id) {
+            $this->init_project_permission_checker($project_id);
+            if (!$this->can_edit_projects($project_id)) {
+                app_redirect("forbidden");
+            }
+        } else {
+            if (!$this->can_create_projects()) {
+                app_redirect("forbidden");
+            }
+        }
+
+        $model_info = $this->Projects_model->get_one($project_id);
+
+        if (!$model_info) {
+            $model_info = new \stdClass();
+            $model_info->id = 0;
+            $model_info->title = "";
+            $model_info->description = "";
+            $model_info->start_date = "";
+            $model_info->deadline = "";
+            $model_info->project_type = "client_project";
+            $model_info->price = "";
+            $model_info->labels = "";
+            $model_info->status_id = 1;
+            $model_info->client_id = 0;
+        }
+
+        $context = $this->request->getPost('context');
+        $context_id = $this->request->getPost('context_id');
+        $client_id = $this->request->getPost('client_id');
+
+        $view_data['model_info'] = $model_info;
+
+        $view_data['context'] = $context ? $context : "";
+        $view_data['context_id'] = $context_id ? $context_id : "";
+        $view_data['client_id'] = $client_id ? $client_id : 0;
+
+        $view_data['login_user'] = $this->login_user;
+
+        $view_data['clients_dropdown'] = $this->Clients_model->get_dropdown_list(array("company_name"), "id", array("is_lead" => 0));
+
+        $view_data['statuses'] = $this->Project_status_model->get_details()->getResult();
+
+        $view_data['label_suggestions'] = $this->make_labels_dropdown("project", $model_info->labels);
+
+        $view_data['custom_fields'] = $this->Custom_fields_model->get_combined_details("projects", $model_info->id, $this->login_user->is_admin, $this->login_user->user_type)->getResult();
+
+        $view_data['hide_clients_dropdown'] = !$this->can_access_clients(true);
+
+        $view_data['can_edit_projects'] = $this->can_edit_projects($project_id);
+
+        return $this->template->view('projects/modal_form', $view_data);
+    }
+
     function save() {
         $this->validate_submitted_data(array(
             "title" => "required",

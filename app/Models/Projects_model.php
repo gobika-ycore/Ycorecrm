@@ -267,7 +267,11 @@ class Projects_model extends Crud_model {
 
         $show_assigned_tasks_only_user_id = $this->_get_clean_value($options, "show_assigned_tasks_only_user_id");
         if ($show_assigned_tasks_only_user_id) {
-            $where .= " AND ($tasks_table.assigned_to=$show_assigned_tasks_only_user_id OR FIND_IN_SET('$show_assigned_tasks_only_user_id', $tasks_table.collaborators))";
+            $where .= " AND ("
+                . "$tasks_table.assigned_to=$show_assigned_tasks_only_user_id"
+                . " OR FIND_IN_SET('$show_assigned_tasks_only_user_id', $tasks_table.collaborators)"
+                . " OR $tasks_table.created_by=$show_assigned_tasks_only_user_id"
+                . ")";
         }
 
         //prepare custom field binding query

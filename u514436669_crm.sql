@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 05, 2025 at 06:42 AM
+-- Generation Time: Nov 26, 2025 at 08:26 AM
 -- Server version: 11.8.3-MariaDB-log
 -- PHP Version: 7.2.34
 
@@ -49,7 +49,8 @@ CREATE TABLE `rise_activity_logs` (
 
 INSERT INTO `rise_activity_logs` (`id`, `created_at`, `created_by`, `action`, `log_type`, `log_type_title`, `log_type_id`, `changes`, `log_for`, `log_for_id`, `log_for2`, `log_for_id2`, `deleted`) VALUES
 (1, '2025-07-04 04:27:49', 55, 'created', 'task', 'Syllabus Download', 1, NULL, 'project', 2, '', 0, 0),
-(2, '2025-07-04 04:31:06', 55, 'updated', 'task', 'Syllabus Download', 1, 'a:2:{s:11:\"description\";a:2:{s:4:\"from\";s:44:\"we need to download the following subjects\r\n\";s:2:\"to\";s:84:\"we need to download the following subjects\r\n1.C#\r\n2. DEVOPS\r\n3.MERN & MEAN\r\n4.ABAP\r\n\";}s:13:\"collaborators\";a:2:{s:4:\"from\";s:2:\"24\";s:2:\"to\";s:5:\"24,23\";}}', 'project', 2, '', 0, 0);
+(2, '2025-07-04 04:31:06', 55, 'updated', 'task', 'Syllabus Download', 1, 'a:2:{s:11:\"description\";a:2:{s:4:\"from\";s:44:\"we need to download the following subjects\r\n\";s:2:\"to\";s:84:\"we need to download the following subjects\r\n1.C#\r\n2. DEVOPS\r\n3.MERN & MEAN\r\n4.ABAP\r\n\";}s:13:\"collaborators\";a:2:{s:4:\"from\";s:2:\"24\";s:2:\"to\";s:5:\"24,23\";}}', 'project', 2, '', 0, 0),
+(3, '2025-11-20 09:06:43', 65, 'created', 'task', 'project x', 2, NULL, 'project', 2, '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -102,20 +103,70 @@ CREATE TABLE `rise_attendance` (
   `note` text DEFAULT NULL,
   `checked_at` datetime DEFAULT NULL,
   `reject_reason` text DEFAULT NULL,
-  `deleted` int(11) NOT NULL DEFAULT 0
+  `deleted` int(11) NOT NULL DEFAULT 0,
+  `date` date DEFAULT NULL,
+  `time` time DEFAULT NULL,
+  `check_in_time` time DEFAULT NULL,
+  `check_out_time` time DEFAULT NULL,
+  `total_hours` decimal(4,2) DEFAULT NULL,
+  `attendance_type` enum('check_in','check_out','full_day') DEFAULT 'full_day',
+  `check_in_latitude` decimal(10,8) DEFAULT NULL,
+  `check_in_longitude` decimal(11,8) DEFAULT NULL,
+  `check_out_latitude` decimal(10,8) DEFAULT NULL,
+  `check_out_longitude` decimal(11,8) DEFAULT NULL,
+  `check_in_address` varchar(255) DEFAULT NULL,
+  `check_out_address` varchar(255) DEFAULT NULL,
+  `location_accuracy` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `rise_attendance`
 --
 
-INSERT INTO `rise_attendance` (`id`, `status`, `user_id`, `in_time`, `out_time`, `checked_by`, `note`, `checked_at`, `reject_reason`, `deleted`) VALUES
-(1, 'pending', 55, '2025-07-02 04:31:46', '2025-07-02 06:09:20', NULL, '', NULL, NULL, 0),
-(2, 'pending', 55, '2025-07-03 06:02:28', '2025-07-04 04:06:42', NULL, '', NULL, NULL, 0),
-(3, 'pending', 55, '2025-07-04 04:06:45', '2025-07-04 10:32:22', NULL, '', NULL, NULL, 0),
-(4, 'incomplete', 55, '2025-07-07 05:12:11', NULL, NULL, NULL, NULL, NULL, 0),
-(5, 'incomplete', 1, '2025-07-21 05:00:12', NULL, NULL, NULL, NULL, NULL, 0),
-(6, 'pending', 65, '2025-09-24 14:13:03', '2025-09-24 14:13:11', NULL, '', NULL, NULL, 0);
+INSERT INTO `rise_attendance` (`id`, `status`, `user_id`, `in_time`, `out_time`, `checked_by`, `note`, `checked_at`, `reject_reason`, `deleted`, `date`, `time`, `check_in_time`, `check_out_time`, `total_hours`, `attendance_type`, `check_in_latitude`, `check_in_longitude`, `check_out_latitude`, `check_out_longitude`, `check_in_address`, `check_out_address`, `location_accuracy`) VALUES
+(1, 'pending', 55, '2025-07-02 04:31:46', '2025-07-02 06:09:20', NULL, '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'pending', 55, '2025-07-03 06:02:28', '2025-07-04 04:06:42', NULL, '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'pending', 55, '2025-07-04 04:06:45', '2025-07-04 10:32:22', NULL, '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 'incomplete', 55, '2025-07-07 05:12:11', NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 'incomplete', 1, '2025-07-21 05:00:12', NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(6, 'pending', 65, '2025-09-24 14:13:03', '2025-09-24 14:13:11', NULL, '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(7, 'pending', 65, '2025-11-05 14:44:19', '2025-11-05 14:45:08', NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(8, '', 65, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, 0, '2025-11-06', '13:21:03', '13:21:03', '13:21:05', 0.00, 'full_day', 9.89140700, 78.17724370, 9.89140700, 78.17724370, 'Viraganur, Puliankulam, Madurai South, Tamil Nadu, 625990', 'Viraganur, Puliankulam, Madurai South, Tamil Nadu, 625990', 17.70),
+(9, '', 66, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, 0, '2025-11-06', '15:24:54', '15:24:54', '15:25:40', 0.00, 'full_day', 9.89137530, 78.17724470, 9.89137570, 78.17723650, 'Puliankulam, Madurai South, Tamil Nadu, 625201', 'Puliankulam, Madurai South, Tamil Nadu, 625201', 20.06),
+(10, 'pending', 65, '2025-11-06 09:58:59', '2025-11-06 09:59:22', NULL, 'No', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11, '', 65, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, 0, '2025-11-07', '19:08:07', '19:08:07', '19:09:28', 0.02, 'full_day', 9.92102100, 78.13116540, 9.92102290, 78.13116470, 'Madurai, Madurai South, Tamil Nadu, 625002', 'Madurai, Madurai South, Tamil Nadu, 625002', 20.00),
+(12, '', 65, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, 0, '2025-11-09', '10:43:16', '10:43:16', '10:43:35', 0.00, 'full_day', 9.89141310, 78.17719810, 9.89141940, 78.17723910, 'Viraganur, Puliankulam, Madurai South, Tamil Nadu, 625990', 'Viraganur, Puliankulam, Madurai South, Tamil Nadu, 625990', 18.57),
+(14, '', 66, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, 0, '2025-11-09', '13:03:42', '13:03:42', '13:04:12', 0.00, 'full_day', 9.89149180, 78.17723680, 9.89146530, 78.17723970, 'Viraganur, Puliankulam, Madurai South, Tamil Nadu, 625990', 'Viraganur, Puliankulam, Madurai South, Tamil Nadu, 625990', 18.38),
+(15, '', 67, '0000-00-00 00:00:00', NULL, NULL, NULL, NULL, NULL, 0, '2025-11-09', '15:33:06', '15:33:06', '15:33:24', 0.00, 'full_day', 9.89148970, 78.17723190, 9.89146910, 78.17723190, 'Viraganur, Puliankulam, Madurai South, Tamil Nadu, 625990', 'Viraganur, Puliankulam, Madurai South, Tamil Nadu, 625990', 16.23),
+(16, 'pending', 65, '2025-11-20 08:56:34', '2025-11-20 08:57:08', NULL, 'Tuesday', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(17, 'pending', 65, '2025-11-20 08:59:51', '2025-11-25 13:28:33', NULL, 'change it\r\n', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(18, 'pending', 65, '2025-11-25 13:28:37', '2025-11-25 13:28:47', NULL, 'change it\r\n', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(19, 'pending', 65, '2025-11-25 13:56:28', '2025-11-25 13:56:39', NULL, 'test', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(20, 'pending', 65, '2025-11-25 13:58:32', '2025-11-25 13:58:44', NULL, 'test', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(21, 'pending', 65, '2025-11-25 13:58:47', '2025-11-25 13:59:35', NULL, 'test', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(22, 'pending', 65, '2025-11-25 13:59:40', '2025-11-25 13:59:46', NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(23, 'pending', 65, '2025-11-25 14:01:51', '2025-11-25 14:07:18', NULL, 'test', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(24, 'pending', 65, '2025-11-25 14:07:23', '2025-11-25 14:22:59', NULL, 'test', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(25, 'pending', 65, '2025-11-25 14:23:02', '2025-11-25 14:40:21', NULL, '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(26, 'incomplete', 65, '2025-11-25 14:40:24', NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'full_day', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rise_attendance_geo`
+--
+
+CREATE TABLE `rise_attendance_geo` (
+  `id` int(11) NOT NULL,
+  `attendance_id` int(11) NOT NULL,
+  `check_in_lat` decimal(10,7) DEFAULT NULL,
+  `check_in_lng` decimal(10,7) DEFAULT NULL,
+  `check_out_lat` decimal(10,7) DEFAULT NULL,
+  `check_out_lng` decimal(10,7) DEFAULT NULL,
+  `check_in_address` text DEFAULT NULL,
+  `check_out_address` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -200,53 +251,9 @@ CREATE TABLE `rise_ci_sessions` (
 --
 
 INSERT INTO `rise_ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
-('ci_session:887af62b77ccc5de8c7ca3bba6885322', '106.200.23.77', '2025-09-25 05:01:37', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383737363439373b5f63695f70726576696f75735f75726c7c733a36303a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f64617368626f6172642f696e6465782f31223b757365725f69647c733a323a223635223b),
-('ci_session:25875d0027752daaabffd705549576dd', '106.200.23.77', '2025-09-25 04:53:53', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383737363033333b),
-('ci_session:c5aa8777f61eeddcb7555fbb7069b194', '106.200.23.77', '2025-09-25 04:54:14', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383737363035343b),
-('ci_session:d3933126e0469ae75d148153ad9785f8', '106.200.23.77', '2025-09-25 05:31:54', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383737363439373b5f63695f70726576696f75735f75726c7c733a3135333a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f6576656e74732f63616c656e6461725f6576656e74732f6576656e74732f302f3f73746172743d323032352d30382d3331543030253341303025334130302532423035253341333026656e643d323032352d31302d31325430302533413030253341303025324230352533413330223b757365725f69647c733a323a223635223b),
-('ci_session:9f893923d91c2001a574ceea6fc5c17e', '106.200.23.77', '2025-09-25 05:01:37', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383737363439373b),
-('ci_session:721d90cb314f0cb88f2ef1d1b02d829e', '106.200.22.84', '2025-09-26 07:23:15', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383837313339353b5f63695f70726576696f75735f75726c7c733a35323a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f64617368626f617264223b757365725f69647c733a323a223635223b),
-('ci_session:aa319da3ba7c8ec4d464e0b8080749af', '106.200.22.84', '2025-09-26 07:04:12', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383837303235323b),
-('ci_session:ba13975baf38fe7044081a795902d50a', '106.200.22.84', '2025-09-26 07:04:37', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383837303237373b),
-('ci_session:7d1473c7b52b9500737413ac1cc272ac', '106.200.22.84', '2025-09-26 07:07:18', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383837303433383b),
-('ci_session:261a8b589c2f76745626bf01c01195d0', '106.200.22.84', '2025-09-26 07:07:20', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383837303434303b),
-('ci_session:2d8a24538654c535c2bf73b0a64bc250', '106.200.22.84', '2025-09-26 07:25:25', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383837313339353b5f63695f70726576696f75735f75726c7c733a35353a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f66696c655f6d616e61676572223b757365725f69647c733a323a223635223b),
-('ci_session:11f765ee108abaca8cbf86f384482b21', '106.200.22.84', '2025-09-26 07:23:15', 0x5f5f63695f6c6173745f726567656e65726174657c693a313735383837313339353b),
-('ci_session:f12171a657f9d68bd4963f2fbefed2ca', '2409:40f4:100a:63ab:3413:fe84:bdce:23e9', '2025-10-25 09:57:11', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313338363233303b5f63695f70726576696f75735f75726c7c733a34393a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f7369676e696e223b),
-('ci_session:75dc09531b4397b883b98d5b3b308117', '103.241.242.5', '2025-10-25 09:57:18', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313338363233363b5f63695f70726576696f75735f75726c7c733a34393a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f7369676e696e223b),
-('ci_session:5bced3e274e8c7e54659007e5cfbfea5', '103.44.18.165', '2025-10-25 09:57:19', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313338363233373b5f63695f70726576696f75735f75726c7c733a34393a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f7369676e696e223b),
-('ci_session:b8be0d1ccc1251e873df04121a925107', '202.62.92.68', '2025-10-25 09:57:20', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313338363234303b5f63695f70726576696f75735f75726c7c733a34393a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f7369676e696e223b),
-('ci_session:a9ac0b59b9b1bf148213124c52bd368d', '106.200.14.62', '2025-10-29 10:08:17', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313733323238373b5f63695f70726576696f75735f75726c7c733a36343a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f70726f6a656374732f616c6c5f70726f6a65637473223b757365725f69647c733a323a223635223b),
-('ci_session:6f0e15f2b63a5784de348bb7fb0f09c0', '106.200.14.62', '2025-10-29 10:04:49', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313733323238393b),
-('ci_session:ec41680232fc4d3e7b57892cb3ce37d9', '106.200.14.62', '2025-10-29 10:05:05', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313733323330353b),
-('ci_session:ce206b822d5398ab68de5edf1f4b18bb', '106.200.14.62', '2025-10-29 10:07:49', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313733323436393b),
-('ci_session:93f1d223ad7827c5f491324d21a00ff8', '106.200.14.62', '2025-10-29 10:07:51', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313733323437313b),
-('ci_session:c0b18c2baf4719ea725c34eab32c7a9d', '106.200.14.62', '2025-10-29 10:08:11', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313733323439313b),
-('ci_session:9d62c28b59d783a751e069c8ea698bcd', '106.200.14.62', '2025-10-29 10:08:13', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313733323439333b),
-('ci_session:5d4f00d80c7d53b01a6ca05396a0b393', '106.200.14.62', '2025-10-29 10:08:15', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313733323439353b),
-('ci_session:5f83d97bd7b46f665cd7c8f353196a77', '106.200.14.62', '2025-10-29 10:08:17', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313733323439373b),
-('ci_session:69c634ffd23bcb214132c5daff5dccc6', '106.200.14.62', '2025-11-01 09:03:02', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938373738323b5f63695f70726576696f75735f75726c7c733a36303a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f64617368626f6172642f696e6465782f31223b757365725f69647c733a323a223635223b),
-('ci_session:5b525fc758160f34063fa6b639368600', '106.200.14.62', '2025-11-01 08:21:45', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353330353b),
-('ci_session:ee174e9a9319551ada128597d10953f6', '106.200.14.62', '2025-11-01 08:21:48', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353330383b),
-('ci_session:b5c1a189f7a2d868e6f8cf0e889078b1', '106.200.14.62', '2025-11-01 08:22:04', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353332343b),
-('ci_session:f1cd8ddd92c6002c41501d469267a615', '106.200.14.62', '2025-11-01 08:22:07', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353332373b),
-('ci_session:a09907fdd18caa1348daad406a87a30f', '106.200.14.62', '2025-11-01 08:22:25', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353334353b),
-('ci_session:95c7c18fca8b27db7cb7d1333ee2296f', '106.200.14.62', '2025-11-01 08:22:30', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353335303b),
-('ci_session:540bf0d6c0bd584a81911be1b5b1872d', '106.200.14.62', '2025-11-01 08:22:34', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353335343b),
-('ci_session:ef38df3afcc4de1754f9384ca23761bf', '106.200.14.62', '2025-11-01 08:22:36', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353335363b),
-('ci_session:311983a565d5a3004778e7d666f0afe6', '106.200.14.62', '2025-11-01 08:22:42', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353336323b),
-('ci_session:e59ecf0149615f6d266e04a4e5acd0c5', '106.200.14.62', '2025-11-01 08:22:44', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353336343b),
-('ci_session:ffbb65099af6feb4220bdd3647c58339', '106.200.14.62', '2025-11-01 08:22:49', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353336393b),
-('ci_session:071e9c515e7efa9b708905ba96d511e1', '106.200.14.62', '2025-11-01 08:23:16', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353339363b),
-('ci_session:8224ef61a4d6d3d50905f0563c59a3a0', '106.200.14.62', '2025-11-01 08:23:20', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353430303b),
-('ci_session:f92c0520b4b24420dab097efa3c9baab', '106.200.14.62', '2025-11-01 08:23:23', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353430333b),
-('ci_session:8933f0fbc49877fbf9fe8335f6fd6573', '106.200.14.62', '2025-11-01 08:23:23', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353430333b),
-('ci_session:39047d738f9705aed0673ee5ee967b83', '106.200.14.62', '2025-11-01 08:23:29', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353430393b),
-('ci_session:dd5acee960348e2aa410f07309315a0d', '106.200.14.62', '2025-11-01 08:23:37', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353431373b),
-('ci_session:966853c0f89c00b4c35bc8941fd9763d', '106.200.14.62', '2025-11-01 08:23:51', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938353433313b),
-('ci_session:d1d9ad910744acd30dbea8dbef9128cd', '106.200.14.62', '2025-11-01 09:07:55', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938373738323b5f63695f70726576696f75735f75726c7c733a3135333a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f6576656e74732f63616c656e6461725f6576656e74732f6576656e74732f302f3f73746172743d323032352d31302d3236543030253341303025334130302532423035253341333026656e643d323032352d31322d30375430302533413030253341303025324230352533413330223b757365725f69647c733a323a223635223b),
-('ci_session:3e8f945fa28c29126f1870359d2d5562', '106.200.14.62', '2025-11-01 09:03:03', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938373738333b),
-('ci_session:7cdea11d1e614d39f698157c6c437254', '106.200.14.62', '2025-11-01 09:05:05', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736313938373930353b);
+('ci_session:70b6e6f994cd5efccbab3c70fad9760f', '2401:4900:9279:bc1a:59b4:7f4f:700c:8c38', '2025-11-26 08:26:17', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736343134353134323b5f63695f70726576696f75735f75726c7c733a36303a2268747470733a2f2f79636f7265746563686e6f6c6f676965732e696e2f63726d2f696e6465782e7068702f64617368626f6172642f696e6465782f31223b757365725f69647c733a323a223635223b),
+('ci_session:2e69811c61a8e4290cbc0ce4be4a075a', '2401:4900:9279:bc1a:59b4:7f4f:700c:8c38', '2025-11-26 08:19:03', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736343134353134333b),
+('ci_session:0da126b088ccb8c607c371a2853ed5cc', '2401:4900:9279:bc1a:59b4:7f4f:700c:8c38', '2025-11-26 08:19:14', 0x5f5f63695f6c6173745f726567656e65726174657c693a313736343134353135343b);
 
 -- --------------------------------------------------------
 
@@ -293,7 +300,9 @@ CREATE TABLE `rise_clients` (
 
 INSERT INTO `rise_clients` (`id`, `company_name`, `type`, `address`, `city`, `state`, `zip`, `country`, `created_date`, `website`, `phone`, `currency_symbol`, `starred_by`, `group_ids`, `deleted`, `is_lead`, `lead_status_id`, `owner_id`, `created_by`, `sort`, `lead_source_id`, `last_lead_status`, `client_migration_date`, `vat_number`, `gst_number`, `stripe_customer_id`, `stripe_card_ending_digit`, `currency`, `disable_online_payment`, `labels`) VALUES
 (1, 'asdf', 'organization', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', 0, 0, 0, 0, 1, 0, 0, '', NULL, NULL, NULL, '', 0, NULL, 0, NULL),
-(2, 'Geninfo-Tech', 'organization', '', 'Madurai', 'Tamilnadu', '625201', 'India', '2025-08-25 08:02:24', 'geninfotechinnovations.in', '09626885353', '', '', '', 0, 0, 0, 0, 58, 0, 0, '', NULL, '', '', '', 0, '', 0, '');
+(2, 'Geninfo-Tech', 'organization', '', 'Madurai', 'Tamilnadu', '625201', 'India', '2025-08-25 08:02:24', 'geninfotechinnovations.in', '09626885353', '', '', '', 0, 0, 0, 0, 58, 0, 0, '', NULL, '', '', '', 0, '', 0, ''),
+(4, 'genfo', 'organization', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', 0, 0, 0, 0, 1, 0, 0, '', NULL, NULL, NULL, '', 0, NULL, 0, NULL),
+(5, 'Dharani', 'person', 'xxx', 'Madurai', '', '', '', '2025-11-25 15:08:56', '', '', '', '', '', 0, 0, 0, 0, 65, 0, 0, '', NULL, '', '', '', 0, '', 0, '');
 
 -- --------------------------------------------------------
 
@@ -646,7 +655,8 @@ CREATE TABLE `rise_events` (
 --
 
 INSERT INTO `rise_events` (`id`, `title`, `description`, `start_date`, `end_date`, `start_time`, `end_time`, `created_by`, `location`, `client_id`, `labels`, `share_with`, `editable_google_event`, `google_event_id`, `deleted`, `lead_id`, `ticket_id`, `project_id`, `task_id`, `proposal_id`, `contract_id`, `subscription_id`, `invoice_id`, `order_id`, `estimate_id`, `related_user_id`, `next_recurring_time`, `no_of_cycles_completed`, `snoozing_time`, `reminder_status`, `type`, `color`, `recurring`, `repeat_every`, `repeat_type`, `no_of_cycles`, `last_start_date`, `recurring_dates`, `confirmed_by`, `rejected_by`, `files`) VALUES
-(1, 'student regigtration at genfotech ', 'Around 10 students from Bharath Niketan Engineering College, Theni\r\n ', '2025-07-07', '2025-07-07', '11:00:00', '13:00:00', 55, 'Institute', 0, '', '', 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 'new', 'event', '#4a8af4', 0, 1, 'months', 0, '0000-00-00', '', '0', '0', 'a:0:{}');
+(1, 'student regigtration at genfotech ', 'Around 10 students from Bharath Niketan Engineering College, Theni\r\n ', '2025-11-20', '2025-11-21', '11:00:00', '18:00:00', 65, 'Institute', 0, '', '', 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 'new', 'event', '#4a8af4', 0, 1, 'months', 0, '0000-00-00', '', '0', '0', 'a:0:{}'),
+(2, 'Office day', '', '2025-11-27', '2025-12-01', '01:35:00', '01:00:00', 65, 'madurai', 5, '', 'all,all_contacts', 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 'new', 'event', '#e74c3c', 1, 30, 'years', 8, '2265-11-27', '2055-11-27,2085-11-27,2115-11-27,2145-11-27,2175-11-27,2205-11-27,2235-11-27,2265-11-27,', '0', '0', 'a:0:{}');
 
 -- --------------------------------------------------------
 
@@ -806,6 +816,29 @@ CREATE TABLE `rise_help_categories` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rise_holidays`
+--
+
+CREATE TABLE `rise_holidays` (
+  `id` int(11) NOT NULL,
+  `holiday_date` date NOT NULL,
+  `holiday_name` varchar(255) NOT NULL,
+  `holiday_type` enum('National','Regional','Festival','Company') NOT NULL DEFAULT 'National',
+  `created_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `rise_holidays`
+--
+
+INSERT INTO `rise_holidays` (`id`, `holiday_date`, `holiday_name`, `holiday_type`, `created_at`) VALUES
+(1, '2025-11-15', 'Company Foundation Day', 'Company', '2025-11-05 08:43:30'),
+(2, '2025-11-30', 'Regional Festival', 'Regional', '2025-11-05 08:43:30'),
+(3, '2025-11-10', 'Diwali', 'Festival', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rise_invoices`
 --
 
@@ -941,6 +974,14 @@ CREATE TABLE `rise_labels` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   `deleted` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `rise_labels`
+--
+
+INSERT INTO `rise_labels` (`id`, `title`, `color`, `context`, `user_id`, `deleted`) VALUES
+(1, 'Hello', '#e74c3c', 'event', 69, 0),
+(2, 'Every one', '#34495e', 'event', 69, 0);
 
 -- --------------------------------------------------------
 
@@ -1092,6 +1133,29 @@ CREATE TABLE `rise_messages` (
   `files` longtext NOT NULL,
   `deleted_by_users` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rise_migrations`
+--
+
+CREATE TABLE `rise_migrations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `version` varchar(255) NOT NULL,
+  `class` varchar(255) NOT NULL,
+  `group` varchar(255) NOT NULL,
+  `namespace` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `batch` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `rise_migrations`
+--
+
+INSERT INTO `rise_migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`, `batch`) VALUES
+(1, '2025-11-05-072200', 'App\\Database\\Migrations\\AddAttendanceExtensions', 'default', 'App', 1762328404, 1);
 
 -- --------------------------------------------------------
 
@@ -1392,7 +1456,9 @@ CREATE TABLE `rise_projects` (
 INSERT INTO `rise_projects` (`id`, `title`, `description`, `project_type`, `start_date`, `deadline`, `client_id`, `created_date`, `created_by`, `status`, `status_id`, `labels`, `price`, `starred_by`, `estimate_id`, `order_id`, `proposal_id`, `deleted`) VALUES
 (1, 'Syllabus making', '', 'internal_project', '2025-07-03', '2025-07-05', 0, '2025-07-03', 1, 'open', 1, '', 0, '', 0, 0, 0, 1),
 (2, 'Syllabus Making', '', 'internal_project', '2025-07-03', '2025-07-05', 0, '2025-07-04', 55, 'open', 1, '', 0, '', 0, 0, 0, 0),
-(3, 'Gen-Info-tech Website', 'Complete website completion for gen-info Tech ', 'client_project', '2025-08-25', '2025-08-30', 2, '2025-08-25', 58, 'open', 1, '', 0, '', 0, 0, 0, 0);
+(3, 'Gen-Info-tech Website', 'Complete website completion for gen-info Tech ', 'client_project', '2025-08-25', '2025-08-30', 0, '2025-08-25', 69, 'open', 1, '', 0, '', 0, 0, 0, 0),
+(4, 'test project', 'ai project ', 'client_project', '2025-11-25', '2025-12-02', 1, '2025-11-25', 65, 'open', 1, '', 1000, '', 0, 0, 0, 0),
+(5, 'AI Printer', '', 'client_project', '2025-11-26', '2025-12-06', 5, '2025-11-25', 65, 'open', 1, '', 0, '', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1459,7 +1525,10 @@ INSERT INTO `rise_project_members` (`id`, `user_id`, `project_id`, `is_leader`, 
 (3, 55, 2, 1, 0),
 (4, 24, 2, 0, 0),
 (5, 23, 2, 0, 0),
-(6, 58, 3, 1, 0);
+(6, 58, 3, 1, 0),
+(7, 65, 4, 1, 0),
+(8, 65, 5, 1, 0),
+(9, 58, 5, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1598,6 +1667,95 @@ CREATE TABLE `rise_proposal_templates` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rise_qr_attendance_logs`
+--
+
+CREATE TABLE `rise_qr_attendance_logs` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `qr_id` varchar(255) NOT NULL,
+  `attendance_status` varchar(50) NOT NULL DEFAULT 'Present',
+  `location_scanned` varchar(255) NOT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `scanned_at` datetime DEFAULT NULL,
+  `user_latitude` decimal(10,8) DEFAULT NULL,
+  `user_longitude` decimal(11,8) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `rise_qr_attendance_logs`
+--
+
+INSERT INTO `rise_qr_attendance_logs` (`id`, `user_id`, `qr_id`, `attendance_status`, `location_scanned`, `ip_address`, `scanned_at`, `user_latitude`, `user_longitude`) VALUES
+(1, 1, 'QR-8d0e5b54', 'Present', 'Main Gate', '127.0.0.1', '2025-11-04 09:00:00', NULL, NULL),
+(2, 1, 'QR-8d0e5b54', 'Present', 'Main Gate', '127.0.0.1', '2025-11-05 09:00:00', NULL, NULL),
+(3, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89143370, 78.17723590),
+(4, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89143370, 78.17723590),
+(5, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89140700, 78.17724370),
+(6, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89140700, 78.17724370),
+(7, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89139850, 78.17723090),
+(8, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89139850, 78.17723090),
+(9, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89139850, 78.17723090),
+(10, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89139850, 78.17723090),
+(11, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89139850, 78.17723090),
+(12, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89134210, 78.17714290),
+(13, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89134210, 78.17714290),
+(14, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89134210, 78.17714290),
+(15, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89134210, 78.17714290),
+(16, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89134210, 78.17714290),
+(17, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89134210, 78.17714290),
+(18, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89134420, 78.17714280),
+(19, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89134420, 78.17714280),
+(20, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89134420, 78.17714280),
+(21, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89141360, 78.17721380),
+(22, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89141610, 78.17721450),
+(23, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89141610, 78.17721450),
+(24, 66, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89137530, 78.17724470),
+(25, 66, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89137570, 78.17723650),
+(26, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.0.23', NULL, 9.92102100, 78.13116540),
+(27, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.0.23', NULL, 9.92102290, 78.13116470),
+(28, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89141310, 78.17719810),
+(29, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89141940, 78.17723910),
+(30, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89146630, 78.17724170),
+(31, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89146630, 78.17724170),
+(32, 66, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89148620, 78.17723390),
+(33, 66, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89143560, 78.17723040),
+(34, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89139260, 78.17721810),
+(35, 65, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89139260, 78.17721810),
+(36, 66, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89149180, 78.17723680),
+(37, 66, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89146530, 78.17723970),
+(38, 67, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89148970, 78.17723190),
+(39, 67, 'STATIC_MAIN_OFFICE', 'Present', 'Main Office', '192.168.1.3', NULL, 9.89146910, 78.17723190);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rise_qr_codes`
+--
+
+CREATE TABLE `rise_qr_codes` (
+  `id` int(11) NOT NULL,
+  `qr_id` varchar(255) NOT NULL,
+  `qr_type` varchar(50) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `valid_date` date DEFAULT NULL,
+  `valid_time` varchar(20) NOT NULL DEFAULT 'all_day',
+  `qr_data` text NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `rise_qr_codes`
+--
+
+INSERT INTO `rise_qr_codes` (`id`, `qr_id`, `qr_type`, `location`, `valid_date`, `valid_time`, `qr_data`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'QR-8d0e5b54', 'entry', 'Main Gate', NULL, 'all_day', '{\"purpose\":\"attendance\",\"zone\":\"A\"}', 1, '2025-11-05 08:43:30', '2025-11-05 08:43:30');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rise_reminder_logs`
 --
 
@@ -1629,6 +1787,36 @@ CREATE TABLE `rise_reminder_settings` (
   `reminder5` int(11) DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rise_reports`
+--
+
+CREATE TABLE `rise_reports` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `report_date` date NOT NULL,
+  `morning_time` time DEFAULT NULL,
+  `evening_time` time DEFAULT NULL,
+  `total_working_hours` decimal(4,2) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `rise_reports`
+--
+
+INSERT INTO `rise_reports` (`id`, `user_id`, `report_date`, `morning_time`, `evening_time`, `total_working_hours`, `created_at`, `updated_at`) VALUES
+(1, 1, '2025-11-04', '09:00:00', '18:00:00', 9.00, '2025-11-05 08:43:30', '2025-11-05 08:43:30'),
+(2, 1, '2025-11-05', '09:15:00', '18:05:00', 8.83, '2025-11-05 08:43:30', '2025-11-05 08:43:30'),
+(3, 66, '2025-11-06', '15:24:54', '15:25:40', 0.00, NULL, NULL),
+(4, 65, '2025-11-07', '19:08:07', '19:09:28', 0.02, NULL, NULL),
+(5, 65, '2025-11-09', '10:43:16', '10:43:35', 0.00, NULL, NULL),
+(6, 66, '2025-11-09', '13:03:42', '13:04:12', 0.00, NULL, NULL),
+(8, 67, '2025-11-09', '15:33:06', '15:33:24', 0.00, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1706,9 +1894,11 @@ INSERT INTO `rise_settings` (`setting_name`, `setting_value`, `type`, `deleted`)
 ('currency_symbol', '₹', 'app', 0),
 ('date_format', 'Y-m-d', 'app', 0),
 ('decimal_separator', '.', 'app', 0),
+('default_client_left_menu', 'a:16:{i:0;a:1:{s:4:\"name\";s:9:\"dashboard\";}i:1;a:1:{s:4:\"name\";s:6:\"events\";}i:2;a:1:{s:4:\"name\";s:5:\"notes\";}i:3;a:1:{s:4:\"name\";s:8:\"projects\";}i:4;a:1:{s:4:\"name\";s:9:\"contracts\";}i:5;a:1:{s:4:\"name\";s:9:\"proposals\";}i:6;a:1:{s:4:\"name\";s:9:\"estimates\";}i:7;a:1:{s:4:\"name\";s:13:\"subscriptions\";}i:8;a:1:{s:4:\"name\";s:8:\"invoices\";}i:9;a:1:{s:4:\"name\";s:16:\"invoice_payments\";}i:10;a:1:{s:4:\"name\";s:7:\"tickets\";}i:11;a:1:{s:4:\"name\";s:13:\"announcements\";}i:12;a:1:{s:4:\"name\";s:5:\"users\";}i:13;a:1:{s:4:\"name\";s:10:\"my_profile\";}i:14;a:1:{s:4:\"name\";s:14:\"knowledge_base\";}i:15;a:1:{s:4:\"name\";s:4:\"todo\";}}', 'app', 0),
 ('default_contract_template', '1', 'app', 0),
 ('default_currency', 'INR', 'app', 0),
 ('default_due_date_after_billing_date', '14', 'app', 0),
+('default_left_menu', 'a:42:{i:0;a:1:{s:4:\"name\";s:9:\"dashboard\";}i:1;a:1:{s:4:\"name\";s:6:\"events\";}i:2;a:1:{s:4:\"name\";s:7:\"clients\";}i:3;a:1:{s:4:\"name\";s:8:\"projects\";}i:4;a:1:{s:4:\"name\";s:5:\"tasks\";}i:5;a:1:{s:4:\"name\";s:5:\"leads\";}i:6;a:1:{s:4:\"name\";s:13:\"subscriptions\";}i:7;a:1:{s:4:\"name\";s:5:\"sales\";}i:8;a:2:{s:4:\"name\";s:8:\"invoices\";s:11:\"is_sub_menu\";s:1:\"1\";}i:9;a:2:{s:4:\"name\";s:11:\"orders_list\";s:11:\"is_sub_menu\";s:1:\"1\";}i:10;a:2:{s:4:\"name\";s:5:\"store\";s:11:\"is_sub_menu\";s:1:\"1\";}i:11;a:2:{s:4:\"name\";s:16:\"invoice_payments\";s:11:\"is_sub_menu\";s:1:\"1\";}i:12;a:2:{s:4:\"name\";s:5:\"items\";s:11:\"is_sub_menu\";s:1:\"1\";}i:13;a:2:{s:4:\"name\";s:9:\"contracts\";s:11:\"is_sub_menu\";s:1:\"1\";}i:14;a:1:{s:4:\"name\";s:9:\"prospects\";}i:15;a:2:{s:4:\"name\";s:13:\"estimate_list\";s:11:\"is_sub_menu\";s:1:\"1\";}i:16;a:2:{s:4:\"name\";s:17:\"estimate_requests\";s:11:\"is_sub_menu\";s:1:\"1\";}i:17;a:2:{s:4:\"name\";s:14:\"estimate_forms\";s:11:\"is_sub_menu\";s:1:\"1\";}i:18;a:2:{s:4:\"name\";s:9:\"proposals\";s:11:\"is_sub_menu\";s:1:\"1\";}i:19;a:1:{s:4:\"name\";s:5:\"notes\";}i:20;a:1:{s:4:\"name\";s:8:\"messages\";}i:21;a:1:{s:4:\"name\";s:4:\"team\";}i:22;a:2:{s:4:\"name\";s:12:\"team_members\";s:11:\"is_sub_menu\";s:1:\"1\";}i:23;a:2:{s:4:\"name\";s:10:\"attendance\";s:11:\"is_sub_menu\";s:1:\"1\";}i:24;a:2:{s:4:\"name\";s:8:\"holidays\";s:11:\"is_sub_menu\";s:1:\"1\";}i:25;a:2:{s:4:\"name\";s:17:\"attendancereports\";s:11:\"is_sub_menu\";s:1:\"1\";}i:26;a:2:{s:4:\"name\";s:6:\"leaves\";s:11:\"is_sub_menu\";s:1:\"1\";}i:27;a:2:{s:4:\"name\";s:8:\"timeline\";s:11:\"is_sub_menu\";s:1:\"1\";}i:28;a:2:{s:4:\"name\";s:13:\"announcements\";s:11:\"is_sub_menu\";s:1:\"1\";}i:29;a:1:{s:4:\"name\";s:7:\"tickets\";}i:30;a:1:{s:4:\"name\";s:8:\"expenses\";}i:31;a:1:{s:4:\"name\";s:7:\"reports\";}i:32;a:1:{s:4:\"name\";s:5:\"files\";}i:33;a:1:{s:4:\"name\";s:16:\"help_and_support\";}i:34;a:2:{s:4:\"name\";s:4:\"help\";s:11:\"is_sub_menu\";s:1:\"1\";}i:35;a:2:{s:4:\"name\";s:13:\"help_articles\";s:11:\"is_sub_menu\";s:1:\"1\";}i:36;a:2:{s:4:\"name\";s:15:\"help_categories\";s:11:\"is_sub_menu\";s:1:\"1\";}i:37;a:2:{s:4:\"name\";s:14:\"knowledge_base\";s:11:\"is_sub_menu\";s:1:\"1\";}i:38;a:2:{s:4:\"name\";s:23:\"knowledge_base_articles\";s:11:\"is_sub_menu\";s:1:\"1\";}i:39;a:2:{s:4:\"name\";s:25:\"knowledge_base_categories\";s:11:\"is_sub_menu\";s:1:\"1\";}i:40;a:1:{s:4:\"name\";s:8:\"settings\";}i:41;a:1:{s:4:\"name\";s:4:\"todo\";}}', 'app', 0),
 ('default_permissions_for_non_primary_contact', 'projects', 'app', 0),
 ('default_proposal_template', '1', 'app', 0),
 ('default_theme_color', 'F2F2F2', 'app', 0),
@@ -1808,7 +1998,12 @@ INSERT INTO `rise_settings` (`setting_name`, `setting_value`, `type`, `deleted`)
 ('user_60_dashboard', '', 'user', 0),
 ('user_61_dashboard', '', 'user', 0),
 ('user_65_dashboard', '', 'user', 0),
+('user_65_left_menu', 'a:42:{i:0;a:1:{s:4:\"name\";s:9:\"dashboard\";}i:1;a:1:{s:4:\"name\";s:6:\"events\";}i:2;a:1:{s:4:\"name\";s:7:\"clients\";}i:3;a:1:{s:4:\"name\";s:8:\"projects\";}i:4;a:1:{s:4:\"name\";s:5:\"tasks\";}i:5;a:1:{s:4:\"name\";s:5:\"leads\";}i:6;a:1:{s:4:\"name\";s:13:\"subscriptions\";}i:7;a:1:{s:4:\"name\";s:5:\"sales\";}i:8;a:2:{s:4:\"name\";s:8:\"invoices\";s:11:\"is_sub_menu\";s:1:\"1\";}i:9;a:2:{s:4:\"name\";s:11:\"orders_list\";s:11:\"is_sub_menu\";s:1:\"1\";}i:10;a:2:{s:4:\"name\";s:5:\"store\";s:11:\"is_sub_menu\";s:1:\"1\";}i:11;a:2:{s:4:\"name\";s:16:\"invoice_payments\";s:11:\"is_sub_menu\";s:1:\"1\";}i:12;a:2:{s:4:\"name\";s:5:\"items\";s:11:\"is_sub_menu\";s:1:\"1\";}i:13;a:2:{s:4:\"name\";s:9:\"contracts\";s:11:\"is_sub_menu\";s:1:\"1\";}i:14;a:1:{s:4:\"name\";s:9:\"prospects\";}i:15;a:2:{s:4:\"name\";s:13:\"estimate_list\";s:11:\"is_sub_menu\";s:1:\"1\";}i:16;a:2:{s:4:\"name\";s:17:\"estimate_requests\";s:11:\"is_sub_menu\";s:1:\"1\";}i:17;a:2:{s:4:\"name\";s:14:\"estimate_forms\";s:11:\"is_sub_menu\";s:1:\"1\";}i:18;a:2:{s:4:\"name\";s:9:\"proposals\";s:11:\"is_sub_menu\";s:1:\"1\";}i:19;a:1:{s:4:\"name\";s:5:\"notes\";}i:20;a:1:{s:4:\"name\";s:8:\"messages\";}i:21;a:1:{s:4:\"name\";s:4:\"team\";}i:22;a:2:{s:4:\"name\";s:12:\"team_members\";s:11:\"is_sub_menu\";s:1:\"1\";}i:23;a:2:{s:4:\"name\";s:10:\"attendance\";s:11:\"is_sub_menu\";s:1:\"1\";}i:24;a:2:{s:4:\"name\";s:8:\"holidays\";s:11:\"is_sub_menu\";s:1:\"1\";}i:25;a:2:{s:4:\"name\";s:17:\"attendancereports\";s:11:\"is_sub_menu\";s:1:\"1\";}i:26;a:2:{s:4:\"name\";s:6:\"leaves\";s:11:\"is_sub_menu\";s:1:\"1\";}i:27;a:2:{s:4:\"name\";s:8:\"timeline\";s:11:\"is_sub_menu\";s:1:\"1\";}i:28;a:2:{s:4:\"name\";s:13:\"announcements\";s:11:\"is_sub_menu\";s:1:\"1\";}i:29;a:1:{s:4:\"name\";s:7:\"tickets\";}i:30;a:1:{s:4:\"name\";s:8:\"expenses\";}i:31;a:1:{s:4:\"name\";s:7:\"reports\";}i:32;a:1:{s:4:\"name\";s:5:\"files\";}i:33;a:1:{s:4:\"name\";s:16:\"help_and_support\";}i:34;a:2:{s:4:\"name\";s:4:\"help\";s:11:\"is_sub_menu\";s:1:\"1\";}i:35;a:2:{s:4:\"name\";s:13:\"help_articles\";s:11:\"is_sub_menu\";s:1:\"1\";}i:36;a:2:{s:4:\"name\";s:15:\"help_categories\";s:11:\"is_sub_menu\";s:1:\"1\";}i:37;a:2:{s:4:\"name\";s:14:\"knowledge_base\";s:11:\"is_sub_menu\";s:1:\"1\";}i:38;a:2:{s:4:\"name\";s:23:\"knowledge_base_articles\";s:11:\"is_sub_menu\";s:1:\"1\";}i:39;a:2:{s:4:\"name\";s:25:\"knowledge_base_categories\";s:11:\"is_sub_menu\";s:1:\"1\";}i:40;a:1:{s:4:\"name\";s:8:\"settings\";}i:41;a:1:{s:4:\"name\";s:4:\"todo\";}}', 'app', 0),
+('user_68_dashboard', '', 'user', 0),
+('user_69_dashboard', '', 'user', 0),
+('user_69_left_menu', 'a:16:{i:0;a:1:{s:4:\"name\";s:9:\"dashboard\";}i:1;a:1:{s:4:\"name\";s:6:\"events\";}i:2;a:1:{s:4:\"name\";s:5:\"notes\";}i:3;a:1:{s:4:\"name\";s:8:\"projects\";}i:4;a:1:{s:4:\"name\";s:9:\"contracts\";}i:5;a:1:{s:4:\"name\";s:9:\"proposals\";}i:6;a:1:{s:4:\"name\";s:9:\"estimates\";}i:7;a:1:{s:4:\"name\";s:13:\"subscriptions\";}i:8;a:1:{s:4:\"name\";s:8:\"invoices\";}i:9;a:1:{s:4:\"name\";s:16:\"invoice_payments\";}i:10;a:1:{s:4:\"name\";s:7:\"tickets\";}i:11;a:1:{s:4:\"name\";s:13:\"announcements\";}i:12;a:1:{s:4:\"name\";s:5:\"users\";}i:13;a:1:{s:4:\"name\";s:10:\"my_profile\";}i:14;a:1:{s:4:\"name\";s:14:\"knowledge_base\";}i:15;a:1:{s:4:\"name\";s:4:\"todo\";}}', 'app', 0),
 ('user_7_dashboard', '', 'user', 0),
+('user_70_dashboard', '', 'user', 0),
 ('user_8_dashboard', '', 'user', 0),
 ('user_9_dashboard', '', 'user', 0),
 ('verify_email_before_client_signup', '', 'app', 0),
@@ -1967,7 +2162,8 @@ CREATE TABLE `rise_tasks` (
 --
 
 INSERT INTO `rise_tasks` (`id`, `title`, `description`, `project_id`, `milestone_id`, `assigned_to`, `deadline`, `labels`, `points`, `status`, `status_id`, `priority_id`, `start_date`, `collaborators`, `sort`, `recurring`, `repeat_every`, `repeat_type`, `no_of_cycles`, `recurring_task_id`, `no_of_cycles_completed`, `created_date`, `blocking`, `blocked_by`, `parent_task_id`, `next_recurring_date`, `reminder_date`, `ticket_id`, `status_changed_at`, `deleted`, `expense_id`, `subscription_id`, `proposal_id`, `contract_id`, `order_id`, `estimate_id`, `invoice_id`, `lead_id`, `client_id`, `context`, `created_by`) VALUES
-(1, 'Syllabus Download', 'we need to download the following subjects\r\n1.C#\r\n2. DEVOPS\r\n3.MERN & MEAN\r\n4.ABAP\r\n', 2, 0, 55, '2025-07-04 17:00:00', '', 1, 'to_do', 1, 1, '2025-07-04 10:00:00', '24,23', 1000, 0, 1, 'months', 0, 0, 0, '2025-07-04', '', '', 0, NULL, NULL, 0, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'project', 55);
+(1, 'Syllabus Download', 'we need to download the following subjects\r\n1.C#\r\n2. DEVOPS\r\n3.MERN & MEAN\r\n4.ABAP\r\n', 2, 0, 55, '2025-07-04 17:00:00', '', 1, 'to_do', 1, 1, '2025-07-04 10:00:00', '24,23', 1000, 0, 1, 'months', 0, 0, 0, '2025-07-04', '', '', 0, NULL, NULL, 0, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'project', 55),
+(2, 'project x', 'first task', 2, 0, 69, '2025-11-21 01:00:00', '', 1, 'to_do', 1, 0, '2025-11-20 01:00:00', '', 1001, 0, 1, 'months', 0, 0, 0, '2025-11-20', '', '', 0, NULL, NULL, 0, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'project', 65);
 
 -- --------------------------------------------------------
 
@@ -2206,79 +2402,85 @@ CREATE TABLE `rise_users` (
   `last_online` datetime DEFAULT NULL,
   `requested_account_removal` tinyint(1) NOT NULL DEFAULT 0,
   `client_permissions` text DEFAULT NULL,
-  `deleted` int(11) NOT NULL DEFAULT 0
+  `deleted` int(11) NOT NULL DEFAULT 0,
+  `is_first_login` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `rise_users`
 --
 
-INSERT INTO `rise_users` (`id`, `first_name`, `last_name`, `user_type`, `is_admin`, `role_id`, `email`, `password`, `image`, `status`, `message_checked_at`, `client_id`, `notification_checked_at`, `is_primary_contact`, `job_title`, `disable_login`, `note`, `address`, `alternative_address`, `phone`, `alternative_phone`, `dob`, `ssn`, `gender`, `sticky_note`, `skype`, `language`, `enable_web_notification`, `enable_email_notification`, `created_at`, `last_online`, `requested_account_removal`, `client_permissions`, `deleted`) VALUES
-(1, 'Yuvaraj', 'Seenipandi', 'staff', 1, 0, 'goappalam@gmail.com', '$2y$10$mLsRLCnOD3113U9WlTlmxee5mKlod1.tT73Tl1q1y78CsTrBxgLbu', NULL, 'active', '2025-05-16 09:52:10', 0, '2025-06-11 10:56:31', 0, 'CEO & Co-Founder', 0, NULL, 'yuvaraj@codeshell.in', '', '8778641324', '', '0000-00-00', '', 'male', NULL, '', '', 1, 1, '0000-00-00 00:00:00', '2025-07-21 06:33:52', 0, NULL, 1),
-(2, 'Vignesh', 'Balan', 'staff', 0, 1, 'vigneshbalan@codeshell.in', '$2y$10$RGns3Q7dXGb/7gfKB.kNIeA0gpl6X0mfM2tMPNO4EkD91F1Kq6VJO', NULL, 'active', NULL, 0, NULL, 0, 'Team Lead', 0, NULL, 'vignesh@codeshell.in', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-09 08:29:34', '2025-05-02 16:37:28', 0, NULL, 1),
-(3, 'Keerthana valli', 'R', 'staff', 0, 1, 'keerthana@codeshell.in', '$2y$10$1AybgK7BzebVhXoFcdh.UemifgrP6iX9HZmeY1oLvkjHMknOgV0FK', NULL, 'active', NULL, 0, '2025-05-01 04:43:56', 0, 'FrontEnd Developer', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-04-10 00:56:55', '2025-05-02 15:43:17', 0, NULL, 1),
-(4, 'Gokul', 'Easwaran', 'staff', 0, 3, 'gokul@codeshell.in', '$2y$10$2.yIgi8DCH8VWk40jUOq/OGgothAMOC.cf6lAUudnOan.B2DMEY6G', NULL, 'active', NULL, 0, NULL, 0, 'Backend Developer', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-10 01:02:22', '2025-05-02 06:54:15', 0, NULL, 1),
-(5, 'Nasrin', 'Fathima', 'staff', 0, 3, 'nasrin@codeshell.in', '$2y$10$HQiLFwz4cF.zzS/u6mh6xe/U0bxuD6/wz6QYlq2OCPJuYx0oxDV1C', NULL, 'active', '2025-04-18 16:27:25', 0, NULL, 0, 'Backend Developer', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-04-10 01:04:08', '2025-05-02 16:37:49', 0, NULL, 1),
-(6, 'A L Asha', 'Rani', 'staff', 0, 3, 'asha@codeshell.in', '$2y$10$ju4PTsJzF.uuTQaDJusbRuOu8z5thPkMXrXzaW2POkSVuuarlI5Bi', NULL, 'active', '2025-04-27 06:42:20', 0, '2025-04-27 06:42:26', 0, 'UX/UI Designer', 0, NULL, '', '', '7010798446', '', '1996-02-14', '', 'female', '', '', '', 1, 1, '2025-04-10 01:05:34', '2025-05-02 14:31:32', 0, NULL, 1),
-(7, 'Siva', 'K', 'staff', 0, 0, 'siva@codeshell.in', '$2y$10$7FGQcWzypham/ip7LJFqwOJSknm5R3vTs8Bq9EkFNjce.JYEMxD6i', NULL, 'inactive', NULL, 0, NULL, 0, 'Frontend Developer', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-10 01:08:15', '2025-04-10 04:27:23', 0, NULL, 1),
-(8, 'Palaniyammal', 'P', 'staff', 0, 3, 'palaniyammal@codeshell.in', '$2y$10$IkEYnA.RF6ZNwUQk7o3YuuKO0iMEf4WiCWlZS7KP7refLvblW5iDC', NULL, 'active', NULL, 0, NULL, 0, 'Frontend Developer', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-04-10 01:09:24', '2025-05-02 16:17:34', 0, NULL, 1),
-(9, 'Muni', 'Nathan', 'staff', 0, 2, 'muni@codeshell.in', '$2y$10$PbDVx5yeK2y4OBVfitPUbuHsXkhuZAMuAJNBgqZGwRWX/b.OvyFYW', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Executive', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-10 01:18:10', '2025-05-02 12:14:20', 0, NULL, 1),
-(10, 'Ilango', 'seenipandi', 'staff', 0, 2, 'ilango@codeshell.in', '$2y$10$6BEezLerrjmNQYLhw7K92uJWe8ti6vvpNbZWo7HA1fIN2WgKFq9Tq', NULL, 'active', '2025-04-14 12:58:14', 0, NULL, 0, 'Marketing Executive', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-10 01:19:16', '2025-05-02 12:51:37', 0, NULL, 1),
-(11, 'Manikandan', 'M', 'staff', 1, 0, 'mani@codeshell.in', '$2y$10$TabaOFglF4D2H7Atdc3RuuRI31EmxXJ1Ji/4IOaGwGJ5W1AxKOwTm', NULL, 'active', '2025-04-17 09:52:21', 0, NULL, 0, 'CFO & Marketing Lead', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-10 01:20:44', '2025-05-02 13:50:47', 0, NULL, 1),
-(12, 'Merlin', 'Ranjithsingh', 'client', 0, 0, 'sportspersonapp@gmail.com', '$2y$10$V0tSZAqqbk15mG54wCsufew5plGVgYsNJdinHTMbS/IF3tRU8C1Se', NULL, 'active', NULL, 2, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-11 02:15:01', '2025-04-12 16:18:52', 0, 'all', 1),
-(13, 'Ramanathan', 'P', 'client', 0, 0, 'rklshares1@gmail.com', '$2y$10$LuSmcN6v0Dhqfr2cdK2Yi.0TZkdqlGrwCWL4LSfd88X9P6xSjItYS', NULL, 'active', NULL, 4, NULL, 1, 'Owner', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-11 03:34:00', NULL, 0, 'all', 1),
-(14, 'Ragavan', 'Adhishankar', 'client', 0, 0, 'ragavanadhisankar@gmail.com', '$2y$10$3pONEAs2qI3XJA4IGnrsYOIRMOFSoejdIbUAQQRZSuEwhpIBb/8Si', NULL, 'active', NULL, 5, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-11 07:19:37', NULL, 0, 'all', 1),
-(15, 'Venkadesh', 'M', 'client', 0, 0, 'alminostructures@gmail.com', '$2y$10$z6IJ9TXPyFBvsltEVmj8rexuldgOpkwx3HwzHomwR3Z44uxuYQwJ2', NULL, 'active', NULL, 7, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-11 07:38:12', '2025-04-24 15:29:24', 0, 'all', 1),
-(16, 'Selva', 'Viknesh', 'staff', 0, 2, 'selva@codeshell.in', '$2y$10$oGFWmgQCDMBGEwUjcVgWSeXBbHpE1SkdsUhKaVgP04WneqICwzZc2', NULL, 'active', NULL, 0, NULL, 0, 'CMO & Co-Founder', 0, NULL, 'selva@codeshell.in', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-11 07:57:19', NULL, 0, NULL, 1),
-(17, 'PooMurugan', 'B', 'client', 0, 0, 'Chandrantechnologies@gmail.com', '$2y$10$AAYGkliKp.bEHJ951kK5H.otiwm/6l3bdi5RMe49BV548zLcJFL0i', NULL, 'active', NULL, 9, NULL, 1, '', 0, '', NULL, NULL, '7094455441', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-11 09:06:26', '2025-04-30 05:55:51', 0, 'all', 1),
-(18, 'Karthik', 'Dharsan Pvt Ltd', 'client', 0, 0, 'leosofabed1212@gmail.com', '$2y$10$94id0B2qYw56k1PAJma4q.4kXYRWcJ6Ilx7sCpQviKD2VzpazlYlq', NULL, 'active', NULL, 12, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, '', NULL, '', '', 1, 1, '2025-04-11 11:57:22', '2025-04-21 10:03:20', 0, 'all', 1),
-(19, 'Vanathi', 'R', 'client', 0, 0, 'aasvatech@gmail.com', '$2y$10$jpPwcv3jxuLyMuhA5KkhUu2yexqfCtMxPPNMx8368hwXJS/eZf0x6', NULL, 'active', NULL, 13, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-04-12 07:35:53', NULL, 0, 'all', 1),
-(20, 'Asif', 'M', 'client', 0, 0, 'ashifahamed380@gmail.com', '$2y$10$QGgQNxVzYosZLK6Gs6yCYOytBQh7hIy7qdIfwO5/njFwVzPOXjTfC', NULL, 'active', NULL, 15, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-12 12:27:32', NULL, 0, 'all', 1),
-(21, 'Gopal', 'A', 'client', 0, 0, 'gopalsivan88@gmail.com', '$2y$10$ivfqP9vGoL03wZ3dAQg2Ze30rRe7bzgVQBwv3UvlQyuzTqBsgDbB6', NULL, 'active', NULL, 19, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-16 08:04:25', NULL, 0, 'all', 1),
-(22, 'Swetha', 'M', 'staff', 0, 0, 'swetha@genfotechinnovations.com', '$2y$10$UbEGGq8C2YTTRJRNXset2u1HmJFEksa4/A5GzUbWJBElg1r6KiBfG', NULL, 'active', NULL, 0, NULL, 0, 'Administrator ', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-05-15 09:37:17', NULL, 0, NULL, 1),
-(23, 'Gopal', 'A', 'staff', 1, 0, 'gopalsivan88@gmail.com', '$2y$10$oQqHNv0iKm9YuKmlSS8AhuMKgLnBeaus4gFuLl2FEW0z0w85kktwC', NULL, 'active', '2025-07-13 15:49:41', 0, '2025-06-19 08:58:26', 0, 'Managing Director', 0, NULL, 'gopalsivan88@gmail.com', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-05-15 09:41:18', '2025-08-23 12:50:13', 0, NULL, 1),
-(24, 'Swetha', 'S', 'staff', 0, 4, 'swetha120604@gmail.com', '$2y$10$Wp/wUxdzvefTNscFLZeihu9mdDCvGsTwu3lPiuvkvGRDf4fx8Dh4S', NULL, 'active', '2025-06-13 04:37:17', 0, '2025-06-13 04:37:02', 0, 'Administrator', 0, NULL, '', '', '', '', '0000-00-00', '', 'female', NULL, '', '', 1, 1, '2025-05-15 09:53:51', '2025-07-16 10:17:47', 0, NULL, 1),
-(25, 'swetha', 's', 'client', 0, 0, 'swetha@gmail.com', '$2y$10$gaxjwSUEh//5IVyARIuf7.epI.ZE5huskV3N5Y1nec0ADvWZoGaDG', NULL, 'active', NULL, 36, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-05-15 10:01:01', NULL, 0, 'all', 1),
-(26, 'Vanathi', 'R', 'lead', 0, 0, 'aasvatech@gmail.com', NULL, NULL, 'active', NULL, 47, NULL, 1, 'Founder', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-05-18 05:08:58', NULL, 0, NULL, 0),
-(27, 'Manikandan', 'M', 'staff', 1, 0, 'mani@codeshell.in', '$2y$10$.1KwebT7FhmE6yFoKsCmPuOpb8fKNTFntvWktWhOmUR/NyKjejQK6', NULL, 'active', NULL, 0, NULL, 0, 'CFO', 0, NULL, 'mani@codeshell.in', NULL, '9655709551', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-05-21 10:30:34', NULL, 0, NULL, 1),
-(28, 'Ilangovan', 'Seenipandi', 'staff', 0, 2, 'ilango@codeshell.in', '$2y$10$Rhy5pAdbj550g7svKy9PyOy3xou8NhkXnKd9KQXC9k40FZOXDtsoy', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Executive', 0, NULL, 'ilango@codeshell.in', NULL, '9025692440', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-05-21 10:31:44', NULL, 0, NULL, 1),
-(29, 'Muninathan', 'M', 'staff', 0, 2, 'muninathan@codeshell.in', '$2y$10$jZv8eUlv3vyA.AxWE7zqReZGrOl4LmNIO9PlOftroM9sDase8Mz0S', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Executive', 0, NULL, 'muninathan@codeshell.in', NULL, '8667034084', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-05-21 10:33:09', NULL, 0, NULL, 1),
-(30, 'Selva Vignesh', 'V', 'staff', 0, 2, 'selva@codeshell.in', '$2y$10$eHite.ocRrmKFdyHYHfb8ujxW.auoB0S1tW8x.ExZtVjS4XhkjQei', NULL, 'active', NULL, 0, NULL, 0, 'CMO', 0, NULL, 'selva@codeshell.in', NULL, '6383607637', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-05-21 10:34:17', NULL, 0, NULL, 1),
-(31, 'shanmuga', 'priya', 'staff', 1, 0, 'priya@codeshell.in', '$2y$10$WNHnM7QiguapmvZrNT8XV.Xkf7j.0keOmxy.t/divoPwoy9Yovnc2', NULL, 'active', NULL, 0, NULL, 0, 'Admin', 0, NULL, 'priya@codeshell.in', NULL, '9626525538', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-05-28 09:41:07', '2025-08-23 15:38:35', 0, NULL, 1),
-(32, 'padmavathi', 'J E', 'staff', 0, 2, 'padma@codeshell.in', '$2y$10$4q1leHIqvH9W.jXOqKck5.Y0zrSUlzJYuWfAT8dJ5/INTYt0iuRQO', NULL, 'active', NULL, 0, NULL, 0, 'Intern', 0, NULL, 'padma@codeshell.in', NULL, '9150524664', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-05-28 09:44:58', '2025-08-23 11:19:08', 0, NULL, 1),
-(33, 'Ram', 'LJ Consultancy', 'staff', 0, 7, 'ram@codeshell.in', '$2y$10$es6Ima6yeUVhjIMBDTG0gOWDYVjRjAnEpfxoLzKP1ASBnnSIUXPfC', NULL, 'active', NULL, 0, NULL, 0, 'Placement Co-ordinator', 0, NULL, 'ram@codeshell.in', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-06-01 05:11:46', NULL, 0, NULL, 1),
-(34, 'Manikandan', 'M', 'staff', 1, 0, 'mani@codeshell.in', '$2y$10$Za/rOxjaCk635vWWegVyJupZ1V4dXuzJBpnftodT.X2CmPLzB/tqy', NULL, 'active', NULL, 0, NULL, 0, 'CFO & Marketing Lead- (Codeshell Technologies)', 0, NULL, 'mani@codeshell.in', NULL, '9655709551', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-06-01 05:14:08', NULL, 0, NULL, 1),
-(35, 'Ilangovan', 'Seenipandi', 'staff', 0, 2, 'ilango@codeshell.in', '$2y$10$0.x3OpDxhNHCph3BFL4xueZuFAbUTQWr2Mc7o4rWnvJMYWP7shrUa', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Executive/IT Recruiter ( Codeshell)', 0, NULL, 'ilango@codeshell.in', NULL, '9025692440', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-06-01 05:16:01', NULL, 0, NULL, 1),
-(36, 'Muni', 'Nathan', 'staff', 0, 2, 'muni@codeshell.in', '$2y$10$9LD.ksjZ1c/4DYDn5EnRiOK1bXeyZHR5FVYjxHBzZ4QEsylQzqm6a', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Executive/IT Recruiter', 0, NULL, 'muni@codeshell.in', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-06-01 05:18:00', NULL, 0, NULL, 1),
-(37, 'Karthik', 'raja', 'staff', 0, 2, 'karthik@codeshell.in', '$2y$10$Avi4Jee3aNEtlNW/EhgAo.T2WGxZ7zJvzAYFNbwii5b5M5wk0L0re', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Intern', 0, NULL, 'karthik@codeshell.in', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-06-01 05:19:14', NULL, 0, NULL, 1),
-(38, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 72, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:52:20', NULL, 0, NULL, 0),
-(39, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 73, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:52:20', NULL, 0, NULL, 0),
-(40, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 74, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:52:20', NULL, 0, NULL, 1),
-(41, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 75, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:52:20', NULL, 0, NULL, 1),
-(42, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 76, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:21', NULL, 0, NULL, 1),
-(43, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 77, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:21', NULL, 0, NULL, 1),
-(44, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 78, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:21', NULL, 0, NULL, 1),
-(45, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 79, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:21', NULL, 0, NULL, 1),
-(46, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 80, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:26', NULL, 0, NULL, 1),
-(47, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 81, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:26', NULL, 0, NULL, 1),
-(48, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 82, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:26', NULL, 0, NULL, 0),
-(49, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 83, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:26', NULL, 0, NULL, 1),
-(50, 'Bhuvana', 'T', 'client', 0, 0, 'bhuvana@codeshell.in', '$2y$10$KQbDqy7qjv0ATMnuCkQ9BuT3jiDMqt1VwMnUtHPL75vY4OSxw50vS', NULL, 'active', NULL, 54, NULL, 1, 'Student - Intern', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-06-12 16:48:26', NULL, 0, 'all', 0),
-(51, 'krithika', 'Krithika', 'client', 0, 0, 'krithika@codeshell.in', '$2y$10$AR2UMsvQ1dzBuSzJfQ27hOm3PbWcoEpI9j4juZOZ6yz.vvYmhHFHe', NULL, 'active', NULL, 104, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-06-13 04:06:41', NULL, 0, 'all', 0),
-(52, 'Salini', 'A', 'client', 0, 0, 'salini.a2503@gmail.com', '$2y$10$gpPHY/AdFJjsUUHVexkzD.QOEMkHUYEaogdU.pK6CFsqxYQt9AIwe', NULL, 'active', NULL, 105, NULL, 1, 'Student  - Intern', 0, '', NULL, NULL, '7845406243', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-06-13 07:39:47', '2025-06-13 07:47:47', 0, 'all', 0),
-(53, 'salini', 'A', 'staff', 0, 0, 'salini@codeshell.in', '$2y$10$5nZ0n.enCgU9Ft2EkYXrt.oG10lSnGcV3aBGyhGGyaPVGLgpuYNUy', NULL, 'active', NULL, 0, NULL, 0, 'Student - intern', 0, NULL, 'salini@codeshell.in', NULL, '7845406243', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-06-13 07:45:02', '2025-06-13 08:05:06', 0, NULL, 1),
-(54, 'Neroling', 'Jinda', 'staff', 0, 1, 'neroling@codeshell.in', '$2y$10$ARft7UORFNeDwmi5TpVqOO86b8zLcWcg7hB.gJzodLE83dYA03QPW', NULL, 'active', NULL, 0, NULL, 0, 'Student - Internship', 0, NULL, 'neroling@codeshell.in', 'Mullan compound, Sethupathi Nagar,  Puyal Kappagam, Pamban - 623521.', '6379734605', '', '0000-00-00', '', 'female', NULL, '', '', 1, 1, '2025-06-16 05:13:19', '2025-06-16 08:23:20', 0, NULL, 1),
-(55, 'Pandeeswari', 'Raju', 'staff', 0, 4, 'pandeeswari@genfotechinnovations.in', '$2y$10$YYayd6hkQnLUaNkJdoNH0.jcMbLhg7aB/2IRc8DXctwyjF1IHkspC', NULL, 'active', '2025-08-23 08:50:38', 0, '2025-06-19 08:57:55', 0, 'Admin', 0, NULL, 'pandeeswari@genfotechinnovations.in', NULL, '9080970633', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-06-17 05:08:25', '2025-08-23 08:51:28', 0, NULL, 1),
-(56, '', '', 'client', 0, 0, 'asdf@gmail.com\r\n', '1234asdf', NULL, 'active', NULL, 0, NULL, 0, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, NULL, NULL, 0, NULL, 0),
-(57, 'asdf', 'asdf', 'client', 0, 0, 'asdf1@gmail.com', '$2y$10$hssl68adI1Lx5pHFBSMPOulSucWOIDxa8FvgOx3UZyB.ZWB8V6YFC', NULL, 'active', NULL, 1, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-08-23 11:12:32', NULL, 0, 'all', 0),
-(58, 'charan', 'ycore', 'staff', 1, 0, 'charan.ycoretechnology@gmail.com', '$2y$10$OrtcZiLHdjOj5y4coHRKdO6uupWcB/FnbURbc3nAoMxtGzfPDGA1i', NULL, 'active', NULL, 0, NULL, 0, 'CEO', 0, NULL, 'charan.ycoretechnology@gmail.com', NULL, '9626885353', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-08-23 12:37:23', '2025-09-24 09:26:33', 0, NULL, 0),
-(59, 'Harish', 's', 'staff', 0, 1, 'harish.ycoretechnologies@gmail.com', '$2y$10$TmeirQzTmjP2llGyqqDCDOSz4MXXKD93j0TrteHWV70s1RTUy14Qm', NULL, 'active', NULL, 0, NULL, 0, 'Internship Team Lead (ITL)', 0, NULL, 'harish.ycoretechnologies@gmail', NULL, '1234567891', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-08-23 16:03:58', NULL, 0, NULL, 0),
-(60, 'yamuna', 'ycore', 'staff', 0, 0, 'yamuna.ycoretechnologies@gmail.com', '$2y$10$U3mqb5Cw6hNv6JDD2rHBH.Jg8.U/4bJMEn4HVzY.cxaStKdVdLGZm', NULL, 'active', NULL, 0, NULL, 0, 'Managing Director', 0, NULL, 'yamuna.ycoretechnologies@gmail.com', NULL, '9626885353', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-08-23 16:40:35', '2025-08-24 02:56:16', 0, NULL, 1),
-(61, 'yamuna', 'ycore', 'staff', 1, 0, 'yamuna.ycoretechnologies@gmail.com', '$2y$10$SHhBazBpoN9nwO7dMxrZZ.zvogEtsU902UDPVEOiTbVmKibyAHkya', NULL, 'active', NULL, 0, NULL, 0, 'Promoter/Managing Director', 0, NULL, 'yamuna.ycoretechnologies@gmail.com', NULL, '9626885353', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-08-24 02:58:42', '2025-08-24 03:20:57', 0, NULL, 0),
-(62, 'Padmavathi', 'x', 'staff', 0, 1, 'padmavathi.ycoretechnologies@gmail.com', '$2y$10$M/VR.dT4aPHOWxxoxiPClOc4VvG39fLNBF9Qzj21etE38umdF9iTy', NULL, 'active', NULL, 0, NULL, 0, 'Technical Lead Intern (TLI)', 0, NULL, 'padmavathi.ycoretechnologies@gmail.com', NULL, '9150524664', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-08-24 03:13:07', NULL, 0, NULL, 0),
-(63, 'Test', 'Test', 'staff', 1, 0, 'ycoretechnologies@gmail.com', '$2y$10$lMz.V713c0lHNzKx/RCFfeqwe5V4eV5Pj.p3zQoGxDcAI6wECzMcK', NULL, 'active', NULL, 0, NULL, 0, 'Test ID', 0, NULL, 'ycoretechnology@gmail.com', NULL, '1234567890', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-09-24 09:22:03', NULL, 0, NULL, 0),
-(64, 'Test', 'Test', 'staff', 1, 0, 'saravanacharan13@gmail.com', '$2y$10$hANRiZUBbuFo0xaR7CcM5eRYoeiy2lisXZRS60zpAX4kF5rXuJAh6', NULL, 'active', NULL, 0, NULL, 0, 'Test ID', 0, NULL, 'ycoretechnology@gmail.com', NULL, '1234567890', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-09-24 09:25:50', NULL, 0, NULL, 0),
-(65, 'Test', 'Test', 'staff', 1, 0, 'saravanasivan13@gmail.com', '$2y$10$py4wooP3SfWSETalhetO0e4CYKweWv9j1u4cgAStIecZ6TuW8DfEC', NULL, 'active', NULL, 0, NULL, 0, 'Test ID', 0, NULL, 'ycoretechnology@gmail.com', NULL, '1234567890', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-09-24 09:26:18', '2025-11-01 09:07:05', 0, NULL, 0);
+INSERT INTO `rise_users` (`id`, `first_name`, `last_name`, `user_type`, `is_admin`, `role_id`, `email`, `password`, `image`, `status`, `message_checked_at`, `client_id`, `notification_checked_at`, `is_primary_contact`, `job_title`, `disable_login`, `note`, `address`, `alternative_address`, `phone`, `alternative_phone`, `dob`, `ssn`, `gender`, `sticky_note`, `skype`, `language`, `enable_web_notification`, `enable_email_notification`, `created_at`, `last_online`, `requested_account_removal`, `client_permissions`, `deleted`, `is_first_login`) VALUES
+(1, 'Yuvaraj', 'Seenipandi', 'staff', 1, 0, 'goappalam@gmail.com', '$2y$10$mLsRLCnOD3113U9WlTlmxee5mKlod1.tT73Tl1q1y78CsTrBxgLbu', NULL, 'active', '2025-05-16 09:52:10', 0, '2025-06-11 10:56:31', 0, 'CEO & Co-Founder', 0, NULL, 'yuvaraj@codeshell.in', '', '8778641324', '', '0000-00-00', '', 'male', NULL, '', '', 1, 1, '0000-00-00 00:00:00', '2025-07-21 06:33:52', 0, NULL, 1, 1),
+(2, 'Vignesh', 'Balan', 'staff', 0, 1, 'vigneshbalan@codeshell.in', '$2y$10$RGns3Q7dXGb/7gfKB.kNIeA0gpl6X0mfM2tMPNO4EkD91F1Kq6VJO', NULL, 'active', NULL, 0, NULL, 0, 'Team Lead', 0, NULL, 'vignesh@codeshell.in', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-09 08:29:34', '2025-05-02 16:37:28', 0, NULL, 1, 1),
+(3, 'Keerthana valli', 'R', 'staff', 0, 1, 'keerthana@codeshell.in', '$2y$10$1AybgK7BzebVhXoFcdh.UemifgrP6iX9HZmeY1oLvkjHMknOgV0FK', NULL, 'active', NULL, 0, '2025-05-01 04:43:56', 0, 'FrontEnd Developer', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-04-10 00:56:55', '2025-05-02 15:43:17', 0, NULL, 1, 1),
+(4, 'Gokul', 'Easwaran', 'staff', 0, 3, 'gokul@codeshell.in', '$2y$10$2.yIgi8DCH8VWk40jUOq/OGgothAMOC.cf6lAUudnOan.B2DMEY6G', NULL, 'active', NULL, 0, NULL, 0, 'Backend Developer', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-10 01:02:22', '2025-05-02 06:54:15', 0, NULL, 1, 1),
+(5, 'Nasrin', 'Fathima', 'staff', 0, 3, 'nasrin@codeshell.in', '$2y$10$HQiLFwz4cF.zzS/u6mh6xe/U0bxuD6/wz6QYlq2OCPJuYx0oxDV1C', NULL, 'active', '2025-04-18 16:27:25', 0, NULL, 0, 'Backend Developer', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-04-10 01:04:08', '2025-05-02 16:37:49', 0, NULL, 1, 1),
+(6, 'A L Asha', 'Rani', 'staff', 0, 3, 'asha@codeshell.in', '$2y$10$ju4PTsJzF.uuTQaDJusbRuOu8z5thPkMXrXzaW2POkSVuuarlI5Bi', NULL, 'active', '2025-04-27 06:42:20', 0, '2025-04-27 06:42:26', 0, 'UX/UI Designer', 0, NULL, '', '', '7010798446', '', '1996-02-14', '', 'female', '', '', '', 1, 1, '2025-04-10 01:05:34', '2025-05-02 14:31:32', 0, NULL, 1, 1),
+(7, 'Siva', 'K', 'staff', 0, 0, 'siva@codeshell.in', '$2y$10$7FGQcWzypham/ip7LJFqwOJSknm5R3vTs8Bq9EkFNjce.JYEMxD6i', NULL, 'inactive', NULL, 0, NULL, 0, 'Frontend Developer', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-10 01:08:15', '2025-04-10 04:27:23', 0, NULL, 1, 1),
+(8, 'Palaniyammal', 'P', 'staff', 0, 3, 'palaniyammal@codeshell.in', '$2y$10$IkEYnA.RF6ZNwUQk7o3YuuKO0iMEf4WiCWlZS7KP7refLvblW5iDC', NULL, 'active', NULL, 0, NULL, 0, 'Frontend Developer', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-04-10 01:09:24', '2025-05-02 16:17:34', 0, NULL, 1, 1),
+(9, 'Muni', 'Nathan', 'staff', 0, 2, 'muni@codeshell.in', '$2y$10$PbDVx5yeK2y4OBVfitPUbuHsXkhuZAMuAJNBgqZGwRWX/b.OvyFYW', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Executive', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-10 01:18:10', '2025-05-02 12:14:20', 0, NULL, 1, 1),
+(10, 'Ilango', 'seenipandi', 'staff', 0, 2, 'ilango@codeshell.in', '$2y$10$6BEezLerrjmNQYLhw7K92uJWe8ti6vvpNbZWo7HA1fIN2WgKFq9Tq', NULL, 'active', '2025-04-14 12:58:14', 0, NULL, 0, 'Marketing Executive', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-10 01:19:16', '2025-05-02 12:51:37', 0, NULL, 1, 1),
+(11, 'Manikandan', 'M', 'staff', 1, 0, 'mani@codeshell.in', '$2y$10$TabaOFglF4D2H7Atdc3RuuRI31EmxXJ1Ji/4IOaGwGJ5W1AxKOwTm', NULL, 'active', '2025-04-17 09:52:21', 0, NULL, 0, 'CFO & Marketing Lead', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-10 01:20:44', '2025-05-02 13:50:47', 0, NULL, 1, 1),
+(12, 'Merlin', 'Ranjithsingh', 'client', 0, 0, 'sportspersonapp@gmail.com', '$2y$10$V0tSZAqqbk15mG54wCsufew5plGVgYsNJdinHTMbS/IF3tRU8C1Se', NULL, 'active', NULL, 2, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-11 02:15:01', '2025-04-12 16:18:52', 0, 'all', 1, 1),
+(13, 'Ramanathan', 'P', 'client', 0, 0, 'rklshares1@gmail.com', '$2y$10$LuSmcN6v0Dhqfr2cdK2Yi.0TZkdqlGrwCWL4LSfd88X9P6xSjItYS', NULL, 'active', NULL, 4, NULL, 1, 'Owner', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-11 03:34:00', NULL, 0, 'all', 1, 1),
+(14, 'Ragavan', 'Adhishankar', 'client', 0, 0, 'ragavanadhisankar@gmail.com', '$2y$10$3pONEAs2qI3XJA4IGnrsYOIRMOFSoejdIbUAQQRZSuEwhpIBb/8Si', NULL, 'active', NULL, 5, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-11 07:19:37', NULL, 0, 'all', 1, 1),
+(15, 'Venkadesh', 'M', 'client', 0, 0, 'alminostructures@gmail.com', '$2y$10$z6IJ9TXPyFBvsltEVmj8rexuldgOpkwx3HwzHomwR3Z44uxuYQwJ2', NULL, 'active', NULL, 7, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-11 07:38:12', '2025-04-24 15:29:24', 0, 'all', 1, 1),
+(16, 'Selva', 'Viknesh', 'staff', 0, 2, 'selva@codeshell.in', '$2y$10$oGFWmgQCDMBGEwUjcVgWSeXBbHpE1SkdsUhKaVgP04WneqICwzZc2', NULL, 'active', NULL, 0, NULL, 0, 'CMO & Co-Founder', 0, NULL, 'selva@codeshell.in', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-04-11 07:57:19', NULL, 0, NULL, 1, 1),
+(17, 'PooMurugan', 'B', 'client', 0, 0, 'Chandrantechnologies@gmail.com', '$2y$10$AAYGkliKp.bEHJ951kK5H.otiwm/6l3bdi5RMe49BV548zLcJFL0i', NULL, 'active', NULL, 9, NULL, 1, '', 0, '', NULL, NULL, '7094455441', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-11 09:06:26', '2025-04-30 05:55:51', 0, 'all', 1, 1),
+(18, 'Karthik', 'Dharsan Pvt Ltd', 'client', 0, 0, 'leosofabed1212@gmail.com', '$2y$10$94id0B2qYw56k1PAJma4q.4kXYRWcJ6Ilx7sCpQviKD2VzpazlYlq', NULL, 'active', NULL, 12, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, '', NULL, '', '', 1, 1, '2025-04-11 11:57:22', '2025-04-21 10:03:20', 0, 'all', 1, 1),
+(19, 'Vanathi', 'R', 'client', 0, 0, 'aasvatech@gmail.com', '$2y$10$jpPwcv3jxuLyMuhA5KkhUu2yexqfCtMxPPNMx8368hwXJS/eZf0x6', NULL, 'active', NULL, 13, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-04-12 07:35:53', NULL, 0, 'all', 1, 1),
+(20, 'Asif', 'M', 'client', 0, 0, 'ashifahamed380@gmail.com', '$2y$10$QGgQNxVzYosZLK6Gs6yCYOytBQh7hIy7qdIfwO5/njFwVzPOXjTfC', NULL, 'active', NULL, 15, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-12 12:27:32', NULL, 0, 'all', 1, 1),
+(21, 'Gopal', 'A', 'client', 0, 0, 'gopalsivan88@gmail.com', '$2y$10$ivfqP9vGoL03wZ3dAQg2Ze30rRe7bzgVQBwv3UvlQyuzTqBsgDbB6', NULL, 'active', NULL, 19, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'male', NULL, '', '', 1, 1, '2025-04-16 08:04:25', NULL, 0, 'all', 1, 1),
+(22, 'Swetha', 'M', 'staff', 0, 0, 'swetha@genfotechinnovations.com', '$2y$10$UbEGGq8C2YTTRJRNXset2u1HmJFEksa4/A5GzUbWJBElg1r6KiBfG', NULL, 'active', NULL, 0, NULL, 0, 'Administrator ', 0, NULL, '', NULL, '', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-05-15 09:37:17', NULL, 0, NULL, 1, 1),
+(23, 'Gopal', 'A', 'staff', 1, 0, 'gopalsivan88@gmail.com', '$2y$10$oQqHNv0iKm9YuKmlSS8AhuMKgLnBeaus4gFuLl2FEW0z0w85kktwC', NULL, 'active', '2025-07-13 15:49:41', 0, '2025-06-19 08:58:26', 0, 'Managing Director', 0, NULL, 'gopalsivan88@gmail.com', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-05-15 09:41:18', '2025-08-23 12:50:13', 0, NULL, 1, 1),
+(24, 'Swetha', 'S', 'staff', 0, 4, 'swetha120604@gmail.com', '$2y$10$Wp/wUxdzvefTNscFLZeihu9mdDCvGsTwu3lPiuvkvGRDf4fx8Dh4S', NULL, 'active', '2025-06-13 04:37:17', 0, '2025-06-13 04:37:02', 0, 'Administrator', 0, NULL, '', '', '', '', '0000-00-00', '', 'female', NULL, '', '', 1, 1, '2025-05-15 09:53:51', '2025-07-16 10:17:47', 0, NULL, 1, 1),
+(25, 'swetha', 's', 'client', 0, 0, 'swetha@gmail.com', '$2y$10$gaxjwSUEh//5IVyARIuf7.epI.ZE5huskV3N5Y1nec0ADvWZoGaDG', NULL, 'active', NULL, 36, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-05-15 10:01:01', NULL, 0, 'all', 1, 1),
+(26, 'Vanathi', 'R', 'lead', 0, 0, 'aasvatech@gmail.com', NULL, NULL, 'active', NULL, 47, NULL, 1, 'Founder', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-05-18 05:08:58', NULL, 0, NULL, 0, 1),
+(27, 'Manikandan', 'M', 'staff', 1, 0, 'mani@codeshell.in', '$2y$10$.1KwebT7FhmE6yFoKsCmPuOpb8fKNTFntvWktWhOmUR/NyKjejQK6', NULL, 'active', NULL, 0, NULL, 0, 'CFO', 0, NULL, 'mani@codeshell.in', NULL, '9655709551', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-05-21 10:30:34', NULL, 0, NULL, 1, 1),
+(28, 'Ilangovan', 'Seenipandi', 'staff', 0, 2, 'ilango@codeshell.in', '$2y$10$Rhy5pAdbj550g7svKy9PyOy3xou8NhkXnKd9KQXC9k40FZOXDtsoy', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Executive', 0, NULL, 'ilango@codeshell.in', NULL, '9025692440', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-05-21 10:31:44', NULL, 0, NULL, 1, 1),
+(29, 'Muninathan', 'M', 'staff', 0, 2, 'muninathan@codeshell.in', '$2y$10$jZv8eUlv3vyA.AxWE7zqReZGrOl4LmNIO9PlOftroM9sDase8Mz0S', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Executive', 0, NULL, 'muninathan@codeshell.in', NULL, '8667034084', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-05-21 10:33:09', NULL, 0, NULL, 1, 1),
+(30, 'Selva Vignesh', 'V', 'staff', 0, 2, 'selva@codeshell.in', '$2y$10$eHite.ocRrmKFdyHYHfb8ujxW.auoB0S1tW8x.ExZtVjS4XhkjQei', NULL, 'active', NULL, 0, NULL, 0, 'CMO', 0, NULL, 'selva@codeshell.in', NULL, '6383607637', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-05-21 10:34:17', NULL, 0, NULL, 1, 1),
+(31, 'shanmuga', 'priya', 'staff', 1, 0, 'priya@codeshell.in', '$2y$10$WNHnM7QiguapmvZrNT8XV.Xkf7j.0keOmxy.t/divoPwoy9Yovnc2', NULL, 'active', NULL, 0, NULL, 0, 'Admin', 0, NULL, 'priya@codeshell.in', NULL, '9626525538', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-05-28 09:41:07', '2025-08-23 15:38:35', 0, NULL, 1, 1),
+(32, 'padmavathi', 'J E', 'staff', 0, 2, 'padma@codeshell.in', '$2y$10$4q1leHIqvH9W.jXOqKck5.Y0zrSUlzJYuWfAT8dJ5/INTYt0iuRQO', NULL, 'active', NULL, 0, NULL, 0, 'Intern', 0, NULL, 'padma@codeshell.in', NULL, '9150524664', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-05-28 09:44:58', '2025-08-23 11:19:08', 0, NULL, 1, 1),
+(33, 'Ram', 'LJ Consultancy', 'staff', 0, 7, 'ram@codeshell.in', '$2y$10$es6Ima6yeUVhjIMBDTG0gOWDYVjRjAnEpfxoLzKP1ASBnnSIUXPfC', NULL, 'active', NULL, 0, NULL, 0, 'Placement Co-ordinator', 0, NULL, 'ram@codeshell.in', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-06-01 05:11:46', NULL, 0, NULL, 1, 1),
+(34, 'Manikandan', 'M', 'staff', 1, 0, 'mani@codeshell.in', '$2y$10$Za/rOxjaCk635vWWegVyJupZ1V4dXuzJBpnftodT.X2CmPLzB/tqy', NULL, 'active', NULL, 0, NULL, 0, 'CFO & Marketing Lead- (Codeshell Technologies)', 0, NULL, 'mani@codeshell.in', NULL, '9655709551', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-06-01 05:14:08', NULL, 0, NULL, 1, 1),
+(35, 'Ilangovan', 'Seenipandi', 'staff', 0, 2, 'ilango@codeshell.in', '$2y$10$0.x3OpDxhNHCph3BFL4xueZuFAbUTQWr2Mc7o4rWnvJMYWP7shrUa', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Executive/IT Recruiter ( Codeshell)', 0, NULL, 'ilango@codeshell.in', NULL, '9025692440', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-06-01 05:16:01', NULL, 0, NULL, 1, 1),
+(36, 'Muni', 'Nathan', 'staff', 0, 2, 'muni@codeshell.in', '$2y$10$9LD.ksjZ1c/4DYDn5EnRiOK1bXeyZHR5FVYjxHBzZ4QEsylQzqm6a', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Executive/IT Recruiter', 0, NULL, 'muni@codeshell.in', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-06-01 05:18:00', NULL, 0, NULL, 1, 1),
+(37, 'Karthik', 'raja', 'staff', 0, 2, 'karthik@codeshell.in', '$2y$10$Avi4Jee3aNEtlNW/EhgAo.T2WGxZ7zJvzAYFNbwii5b5M5wk0L0re', NULL, 'active', NULL, 0, NULL, 0, 'Marketing Intern', 0, NULL, 'karthik@codeshell.in', NULL, '', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-06-01 05:19:14', NULL, 0, NULL, 1, 1),
+(38, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 72, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:52:20', NULL, 0, NULL, 0, 1),
+(39, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 73, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:52:20', NULL, 0, NULL, 0, 1),
+(40, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 74, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:52:20', NULL, 0, NULL, 1, 1),
+(41, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 75, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:52:20', NULL, 0, NULL, 1, 1),
+(42, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 76, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:21', NULL, 0, NULL, 1, 1),
+(43, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 77, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:21', NULL, 0, NULL, 1, 1),
+(44, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 78, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:21', NULL, 0, NULL, 1, 1),
+(45, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 79, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:21', NULL, 0, NULL, 1, 1),
+(46, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 80, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:26', NULL, 0, NULL, 1, 1),
+(47, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 81, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:26', NULL, 0, NULL, 1, 1),
+(48, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 82, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:26', NULL, 0, NULL, 0, 1),
+(49, '', '', 'lead', 0, 0, '', NULL, NULL, 'active', NULL, 83, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-06-02 10:53:26', NULL, 0, NULL, 1, 1),
+(50, 'Bhuvana', 'T', 'client', 0, 0, 'bhuvana@codeshell.in', '$2y$10$KQbDqy7qjv0ATMnuCkQ9BuT3jiDMqt1VwMnUtHPL75vY4OSxw50vS', NULL, 'active', NULL, 54, NULL, 1, 'Student - Intern', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-06-12 16:48:26', NULL, 0, 'all', 0, 1),
+(51, 'krithika', 'Krithika', 'client', 0, 0, 'krithika@codeshell.in', '$2y$10$AR2UMsvQ1dzBuSzJfQ27hOm3PbWcoEpI9j4juZOZ6yz.vvYmhHFHe', NULL, 'active', NULL, 104, NULL, 1, '', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-06-13 04:06:41', NULL, 0, 'all', 0, 1),
+(52, 'Salini', 'A', 'client', 0, 0, 'salini.a2503@gmail.com', '$2y$10$gpPHY/AdFJjsUUHVexkzD.QOEMkHUYEaogdU.pK6CFsqxYQt9AIwe', NULL, 'active', NULL, 105, NULL, 1, 'Student  - Intern', 0, '', NULL, NULL, '7845406243', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-06-13 07:39:47', '2025-06-13 07:47:47', 0, 'all', 0, 1),
+(53, 'salini', 'A', 'staff', 0, 0, 'salini@codeshell.in', '$2y$10$5nZ0n.enCgU9Ft2EkYXrt.oG10lSnGcV3aBGyhGGyaPVGLgpuYNUy', NULL, 'active', NULL, 0, NULL, 0, 'Student - intern', 0, NULL, 'salini@codeshell.in', NULL, '7845406243', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-06-13 07:45:02', '2025-06-13 08:05:06', 0, NULL, 1, 1),
+(54, 'Neroling', 'Jinda', 'staff', 0, 1, 'neroling@codeshell.in', '$2y$10$ARft7UORFNeDwmi5TpVqOO86b8zLcWcg7hB.gJzodLE83dYA03QPW', NULL, 'active', NULL, 0, NULL, 0, 'Student - Internship', 0, NULL, 'neroling@codeshell.in', 'Mullan compound, Sethupathi Nagar,  Puyal Kappagam, Pamban - 623521.', '6379734605', '', '0000-00-00', '', 'female', NULL, '', '', 1, 1, '2025-06-16 05:13:19', '2025-06-16 08:23:20', 0, NULL, 1, 1),
+(55, 'Pandeeswari', 'Raju', 'staff', 0, 4, 'pandeeswari@genfotechinnovations.in', '$2y$10$YYayd6hkQnLUaNkJdoNH0.jcMbLhg7aB/2IRc8DXctwyjF1IHkspC', NULL, 'active', '2025-08-23 08:50:38', 0, '2025-06-19 08:57:55', 0, 'Admin', 0, NULL, 'pandeeswari@genfotechinnovations.in', NULL, '9080970633', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-06-17 05:08:25', '2025-08-23 08:51:28', 0, NULL, 1, 1),
+(56, '', '', 'client', 0, 0, 'asdf@gmail.com\r\n', '1234asdf', NULL, 'active', NULL, 0, NULL, 0, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, NULL, NULL, 0, NULL, 0, 1),
+(57, 'asdf', 'asdf', 'client', 0, 0, 'asdf1@gmail.com', '$2y$10$hssl68adI1Lx5pHFBSMPOulSucWOIDxa8FvgOx3UZyB.ZWB8V6YFC', NULL, 'active', NULL, 1, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-08-23 11:12:32', NULL, 0, 'all', 0, 1),
+(58, 'charan', 'ycore', 'staff', 1, 0, 'charan.ycoretechnology@gmail.com', '$2y$10$OrtcZiLHdjOj5y4coHRKdO6uupWcB/FnbURbc3nAoMxtGzfPDGA1i', NULL, 'active', NULL, 0, NULL, 0, 'CEO', 0, NULL, 'charan.ycoretechnology@gmail.com', NULL, '9626885353', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-08-23 12:37:23', '2025-11-14 09:37:14', 0, NULL, 0, 1),
+(59, 'Harish', 's', 'staff', 0, 1, 'harish.ycoretechnologies@gmail.com', '$2y$10$TmeirQzTmjP2llGyqqDCDOSz4MXXKD93j0TrteHWV70s1RTUy14Qm', NULL, 'active', NULL, 0, NULL, 0, 'Internship Team Lead (ITL)', 0, NULL, 'harish.ycoretechnologies@gmail', NULL, '1234567891', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-08-23 16:03:58', NULL, 0, NULL, 0, 1),
+(60, 'yamuna', 'ycore', 'staff', 0, 0, 'yamuna.ycoretechnologies@gmail.com', '$2y$10$U3mqb5Cw6hNv6JDD2rHBH.Jg8.U/4bJMEn4HVzY.cxaStKdVdLGZm', NULL, 'active', NULL, 0, NULL, 0, 'Managing Director', 0, NULL, 'yamuna.ycoretechnologies@gmail.com', NULL, '9626885353', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-08-23 16:40:35', '2025-08-24 02:56:16', 0, NULL, 1, 1),
+(61, 'yamuna', 'ycore', 'staff', 1, 0, 'yamuna.ycoretechnologies@gmail.com', '$2y$10$SHhBazBpoN9nwO7dMxrZZ.zvogEtsU902UDPVEOiTbVmKibyAHkya', NULL, 'active', NULL, 0, NULL, 0, 'Promoter/Managing Director', 0, NULL, 'yamuna.ycoretechnologies@gmail.com', NULL, '9626885353', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-08-24 02:58:42', '2025-08-24 03:20:57', 0, NULL, 0, 1),
+(62, 'Padmavathi', 'x', 'staff', 0, 1, 'padmavathi.ycoretechnologies@gmail.com', '$2y$10$M/VR.dT4aPHOWxxoxiPClOc4VvG39fLNBF9Qzj21etE38umdF9iTy', NULL, 'active', NULL, 0, NULL, 0, 'Technical Lead Intern (TLI)', 0, NULL, 'padmavathi.ycoretechnologies@gmail.com', NULL, '9150524664', NULL, NULL, NULL, 'female', NULL, NULL, '', 1, 1, '2025-08-24 03:13:07', NULL, 0, NULL, 0, 1),
+(63, 'Test', 'Test', 'staff', 1, 0, 'ycoretechnologies@gmail.com', '$2y$10$lMz.V713c0lHNzKx/RCFfeqwe5V4eV5Pj.p3zQoGxDcAI6wECzMcK', NULL, 'active', NULL, 0, NULL, 0, 'Test ID', 0, NULL, 'ycoretechnology@gmail.com', NULL, '1234567890', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-09-24 09:22:03', NULL, 0, NULL, 0, 1),
+(64, 'Test', 'Test', 'staff', 1, 0, 'saravanacharan13@gmail.com', '$2y$10$hANRiZUBbuFo0xaR7CcM5eRYoeiy2lisXZRS60zpAX4kF5rXuJAh6', NULL, 'active', NULL, 0, NULL, 0, 'Test ID', 0, NULL, 'ycoretechnology@gmail.com', NULL, '1234567890', NULL, NULL, NULL, 'male', NULL, NULL, '', 1, 1, '2025-09-24 09:25:50', NULL, 0, NULL, 0, 1),
+(65, 'Test1  ', 'Test1', 'staff', 1, 0, 'saravanasivan13@gmail.com', '$2y$10$FXWiepipYNVCP0XIIqu2U.2UxsehqSJQyyL.zn8ybVAMdVP4YB.Sa', NULL, 'active', '2025-11-17 10:31:19', 0, '2025-11-17 10:31:20', 0, 'Test ID', 0, NULL, 'ycoretechnology@gmail.com', '', '1234567890', '', '0000-00-00', '', 'male', NULL, '', 'english', 1, 1, '2025-09-24 09:26:18', '2025-11-26 08:25:20', 0, NULL, 0, 0),
+(66, 'Dharani', 'K', 'client', 1, 0, 'dharanikumarmail@gmail.com', '$2y$10$EfPh77euWIw8AM9cZGEfcOCrou0jeWQ/opVvWKpqnzKgBjTTyf/22', NULL, 'active', NULL, 0, NULL, 0, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, NULL, NULL, 0, NULL, 0, 0),
+(67, 'Dharani', 'K', 'client', 0, 0, 'dharani@gmail.com', '$2y$10$FXWiepipYNVCP0XIIqu2U.2UxsehqSJQyyL.zn8ybVAMdVP4YB.Sa', NULL, 'active', NULL, 0, NULL, 0, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, NULL, NULL, 0, NULL, 0, 0),
+(68, 'Dharani', 'K', 'client', 0, 0, 'dharani1@gmail.com', '$2y$10$weOzZMczO5wrX/BJvzu.VuYtBATRwDX5jMcas42ifLZn/Rey5bxl2', NULL, 'active', NULL, 3, NULL, 1, 'Untitled', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 1, 1, '2025-11-13 07:25:35', '2025-11-13 09:50:59', 0, 'all', 0, 1),
+(69, 'Dharani', 'k', 'client', 0, 0, 'dharani2@gmail.com', '$2y$10$RSfn7cllV9AvDufhxn5hk.X0I46gp8HSdLIo0IUtrntfuP6HWXbUq', NULL, 'active', NULL, 4, NULL, 1, 'Untitled', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-11-20 08:25:22', '2025-11-26 02:17:48', 0, 'all', 0, 1),
+(70, 'Dharani', 'K', 'client', 0, 0, 'dharani2@gmail.com', '$2y$10$RhiGPnnpL6n9QozyA4IfsuO3WH/IgXjAB2Kr/1XfdolYnMG/4bVai', NULL, 'active', NULL, 5, NULL, 1, 'Software Developer', 0, '', NULL, NULL, '', NULL, NULL, NULL, 'female', NULL, '', '', 1, 1, '2025-11-25 15:10:47', '2025-11-26 02:19:23', 0, 'all', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -2288,19 +2490,20 @@ INSERT INTO `rise_users` (`id`, `first_name`, `last_name`, `user_type`, `is_admi
 
 CREATE TABLE `rise_verification` (
   `id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `type` enum('invoice_payment','reset_password','verify_email','invitation') NOT NULL,
-  `code` varchar(10) NOT NULL,
-  `params` text NOT NULL,
-  `deleted` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+  `email` varchar(255) NOT NULL,
+  `otp` varchar(10) NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `used` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `rise_verification`
 --
 
-INSERT INTO `rise_verification` (`id`, `created_at`, `type`, `code`, `params`, `deleted`) VALUES
-(1, '2025-08-23 15:42:33', 'reset_password', 'DUPXkqTwpW', 'a:2:{s:5:\"email\";s:32:\"charan.ycoretechnology@gmail.com\";s:11:\"expire_time\";i:1756050153;}', 0);
+INSERT INTO `rise_verification` (`id`, `email`, `otp`, `expires_at`, `used`, `created_at`) VALUES
+(1, 'dharanikumarmail@gmail.com', '8373', '2025-11-06 15:03:24', 0, '2025-11-06 09:23:24'),
+(2, 'dharanikumarmail@gmail.com', '8942', '2025-11-06 15:05:29', 1, '2025-11-06 09:25:29');
 
 --
 -- Indexes for dumped tables
@@ -2336,6 +2539,13 @@ ALTER TABLE `rise_attendance`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `checked_by` (`checked_by`);
+
+--
+-- Indexes for table `rise_attendance_geo`
+--
+ALTER TABLE `rise_attendance_geo`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_attendance_id` (`attendance_id`);
 
 --
 -- Indexes for table `rise_automation_settings`
@@ -2536,6 +2746,14 @@ ALTER TABLE `rise_help_categories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `rise_holidays`
+--
+ALTER TABLE `rise_holidays`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `holiday_date` (`holiday_date`),
+  ADD KEY `holiday_type` (`holiday_type`);
+
+--
 -- Indexes for table `rise_invoices`
 --
 ALTER TABLE `rise_invoices`
@@ -2624,6 +2842,12 @@ ALTER TABLE `rise_messages`
   ADD PRIMARY KEY (`id`),
   ADD KEY `message_from` (`from_user_id`),
   ADD KEY `message_to` (`to_user_id`);
+
+--
+-- Indexes for table `rise_migrations`
+--
+ALTER TABLE `rise_migrations`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `rise_milestones`
@@ -2776,6 +3000,25 @@ ALTER TABLE `rise_proposal_templates`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `rise_qr_attendance_logs`
+--
+ALTER TABLE `rise_qr_attendance_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `qr_id` (`qr_id`),
+  ADD KEY `scanned_at` (`scanned_at`);
+
+--
+-- Indexes for table `rise_qr_codes`
+--
+ALTER TABLE `rise_qr_codes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `qr_id` (`qr_id`),
+  ADD KEY `location` (`location`),
+  ADD KEY `valid_date` (`valid_date`),
+  ADD KEY `is_active` (`is_active`);
+
+--
 -- Indexes for table `rise_reminder_logs`
 --
 ALTER TABLE `rise_reminder_logs`
@@ -2786,6 +3029,15 @@ ALTER TABLE `rise_reminder_logs`
 --
 ALTER TABLE `rise_reminder_settings`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `rise_reports`
+--
+ALTER TABLE `rise_reports`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_user_report_date` (`user_id`,`report_date`),
+  ADD KEY `user_id_report_date` (`user_id`,`report_date`),
+  ADD KEY `report_date` (`report_date`);
 
 --
 -- Indexes for table `rise_roles`
@@ -2924,7 +3176,10 @@ ALTER TABLE `rise_users`
 -- Indexes for table `rise_verification`
 --
 ALTER TABLE `rise_verification`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_email` (`email`),
+  ADD KEY `idx_otp` (`otp`),
+  ADD KEY `idx_expires_at` (`expires_at`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -2934,7 +3189,7 @@ ALTER TABLE `rise_verification`
 -- AUTO_INCREMENT for table `rise_activity_logs`
 --
 ALTER TABLE `rise_activity_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `rise_announcements`
@@ -2952,7 +3207,13 @@ ALTER TABLE `rise_article_helpful_status`
 -- AUTO_INCREMENT for table `rise_attendance`
 --
 ALTER TABLE `rise_attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `rise_attendance_geo`
+--
+ALTER TABLE `rise_attendance_geo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `rise_automation_settings`
@@ -2982,7 +3243,7 @@ ALTER TABLE `rise_checklist_template`
 -- AUTO_INCREMENT for table `rise_clients`
 --
 ALTER TABLE `rise_clients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `rise_client_groups`
@@ -3078,7 +3339,7 @@ ALTER TABLE `rise_estimate_requests`
 -- AUTO_INCREMENT for table `rise_events`
 --
 ALTER TABLE `rise_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `rise_event_tracker`
@@ -3129,6 +3390,12 @@ ALTER TABLE `rise_help_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `rise_holidays`
+--
+ALTER TABLE `rise_holidays`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `rise_invoices`
 --
 ALTER TABLE `rise_invoices`
@@ -3162,7 +3429,7 @@ ALTER TABLE `rise_item_categories`
 -- AUTO_INCREMENT for table `rise_labels`
 --
 ALTER TABLE `rise_labels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `rise_leads`
@@ -3205,6 +3472,12 @@ ALTER TABLE `rise_likes`
 --
 ALTER TABLE `rise_messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `rise_migrations`
+--
+ALTER TABLE `rise_migrations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `rise_milestones`
@@ -3288,7 +3561,7 @@ ALTER TABLE `rise_posts`
 -- AUTO_INCREMENT for table `rise_projects`
 --
 ALTER TABLE `rise_projects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `rise_project_comments`
@@ -3306,7 +3579,7 @@ ALTER TABLE `rise_project_files`
 -- AUTO_INCREMENT for table `rise_project_members`
 --
 ALTER TABLE `rise_project_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `rise_project_status`
@@ -3345,6 +3618,18 @@ ALTER TABLE `rise_proposal_templates`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `rise_qr_attendance_logs`
+--
+ALTER TABLE `rise_qr_attendance_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+
+--
+-- AUTO_INCREMENT for table `rise_qr_codes`
+--
+ALTER TABLE `rise_qr_codes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `rise_reminder_logs`
 --
 ALTER TABLE `rise_reminder_logs`
@@ -3355,6 +3640,12 @@ ALTER TABLE `rise_reminder_logs`
 --
 ALTER TABLE `rise_reminder_settings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `rise_reports`
+--
+ALTER TABLE `rise_reports`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `rise_roles`
@@ -3384,7 +3675,7 @@ ALTER TABLE `rise_subscription_items`
 -- AUTO_INCREMENT for table `rise_tasks`
 --
 ALTER TABLE `rise_tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `rise_task_priority`
@@ -3450,13 +3741,29 @@ ALTER TABLE `rise_to_do`
 -- AUTO_INCREMENT for table `rise_users`
 --
 ALTER TABLE `rise_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `rise_verification`
 --
 ALTER TABLE `rise_verification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `rise_qr_attendance_logs`
+--
+ALTER TABLE `rise_qr_attendance_logs`
+  ADD CONSTRAINT `fk_qr_logs_user` FOREIGN KEY (`user_id`) REFERENCES `rise_users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `rise_reports`
+--
+ALTER TABLE `rise_reports`
+  ADD CONSTRAINT `fk_reports_user` FOREIGN KEY (`user_id`) REFERENCES `rise_users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

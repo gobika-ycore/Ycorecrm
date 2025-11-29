@@ -65,7 +65,7 @@ class App extends BaseConfig {
      * @var string
      */
     // app/Config/App.php
-public string $baseURL = 'http://localhost/crm/';
+public string $baseURL = 'http://localhost/Ycore_CRM/';
     
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.

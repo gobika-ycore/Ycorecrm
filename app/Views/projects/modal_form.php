@@ -1,3 +1,4 @@
+
 <?php echo form_open(get_uri("projects/save"), array("id" => "project-form", "class" => "general-form", "role" => "form")); ?>
 <div class="modal-body clearfix">
     <div class="container-fluid">
@@ -159,6 +160,7 @@
                     <label for="status_id" class=" col-md-3"><?php echo app_lang('status'); ?></label>
                     <div class="col-md-9">
                         <?php
+                        $project_status = array();
                         foreach ($statuses as $status) {
                             $project_status[$status->id] = $status->key_name ? app_lang($status->key_name) : $status->title;
                         }

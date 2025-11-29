@@ -260,19 +260,39 @@
 
 
 <div class="modal-footer">
+    <div id="team-member-view-link" class="hide">
+        <?php echo modal_anchor(get_uri("team_members/view"), "", array("data-modal-lg" => "1")); ?>
+    </div>
     <button class="btn btn-default" data-bs-dismiss="modal"><span data-feather="x" class="icon-16"></span> <?php echo app_lang('close'); ?></button>
     <button id="form-previous" type="button" class="btn btn-default hide"><span data-feather="arrow-left-circle" class="icon-16"></span> <?php echo app_lang('previous'); ?></button>
     <button id="form-next" type="button" class="btn btn-info text-white"><span data-feather="arrow-right-circle" class="icon-16"></span> <?php echo app_lang('next'); ?></button>
+    <button id="form-save-show" type="button" class="btn btn-info text-white hide"><span data-feather="eye" class="icon-16"></span> <?php echo app_lang('save_and_show'); ?></button>
     <button id="form-submit" type="button" class="btn btn-primary hide"><span data-feather="check-circle" class="icon-16"></span> <?php echo app_lang('save'); ?></button>
 </div>
 <?php echo form_close(); ?>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#team_member-form").appForm({
+        window.teamMemberShowAfterSave = false;
+
+        window.teamMemberForm = $("#team_member-form").appForm({
+            closeModalOnSuccess: false,
             onSuccess: function (result) {
                 if (result.success) {
                     $("#team_member-table").appTable({newData: result.data, dataId: result.id});
+                    if (result.message) {
+                        appAlert.success(result.message);
+                    }
+                    if (window.teamMemberShowAfterSave) {
+                        var $memberViewLink = $("#team-member-view-link").find("a");
+                        $memberViewLink.attr("data-action-url", "<?php echo get_uri("team_members/view"); ?>/" + result.id);
+                        $memberViewLink.attr("data-title", "<?php echo app_lang('team_members'); ?>" + " #" + result.id);
+                        $memberViewLink.trigger("click");
+                    } else {
+                        window.teamMemberForm.closeModal();
+                    }
+
+                    window.teamMemberShowAfterSave = false;
                 }
             },
             onSubmit: function () {
@@ -306,19 +326,22 @@
                     $accountTab = $("#account-info-tab"),
                     $previousButton = $("#form-previous"),
                     $nextButton = $("#form-next"),
-                    $submitButton = $("#form-submit");
+                    $submitButton = $("#form-submit"),
+                    $saveShowButton = $("#form-save-show");
 
             if ($accountTab.hasClass("active")) {
                 $accountTab.removeClass("active");
                 $jobTab.addClass("active");
                 $nextButton.removeClass("hide");
                 $submitButton.addClass("hide");
+                $saveShowButton.addClass("hide");
             } else if ($jobTab.hasClass("active")) {
                 $jobTab.removeClass("active");
                 $generalTab.addClass("active");
                 $previousButton.addClass("hide");
                 $nextButton.removeClass("hide");
                 $submitButton.addClass("hide");
+                $saveShowButton.addClass("hide");
             }
         });
 
@@ -328,7 +351,8 @@
                     $accountTab = $("#account-info-tab"),
                     $previousButton = $("#form-previous"),
                     $nextButton = $("#form-next"),
-                    $submitButton = $("#form-submit");
+                    $submitButton = $("#form-submit"),
+                    $saveShowButton = $("#form-save-show");
             if (!$("#team_member-form").valid()) {
                 return false;
             }
@@ -348,6 +372,7 @@
                 $previousButton.removeClass("hide");
                 $nextButton.addClass("hide");
                 $submitButton.removeClass("hide");
+                $saveShowButton.removeClass("hide");
                 $("#form-progress-bar").width("72%");
                 $("#job-info-label").find("svg").remove();
                 $("#job-info-label").prepend('<i data-feather="check-circle" class="icon-16"></i>');
@@ -358,6 +383,12 @@
         });
 
         $("#form-submit").click(function () {
+            window.teamMemberShowAfterSave = false;
+            $("#team_member-form").trigger('submit');
+        });
+
+        $("#form-save-show").click(function () {
+            window.teamMemberShowAfterSave = true;
             $("#team_member-form").trigger('submit');
         });
 

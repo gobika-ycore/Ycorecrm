@@ -1,3 +1,9 @@
+<?php
+$can_edit_team_members = $login_user->is_admin || get_array_value($login_user->permissions, "can_add_or_invite_new_team_members");
+$can_delete_team_members = $login_user->is_admin || get_array_value($login_user->permissions, "can_delete_team_members");
+$show_option_column = $can_edit_team_members || $can_delete_team_members;
+?>
+
 <div id="page-content" class="page-wrapper clearfix">
     <div class="card">
         <div class="page-title clearfix">
@@ -30,9 +36,9 @@
             visibleContact = true;
         }
 
-        var visibleDelete = false;
-        if ("<?php echo $login_user->is_admin; ?>") {
-            visibleDelete = true;
+        var visibleOption = false;
+        if ("<?php echo $show_option_column ? 1 : 0; ?>") {
+            visibleOption = true;
         }
 
         $("#team_member-table").appTable({
@@ -47,7 +53,7 @@
                 {visible: visibleContact, title: "<?php echo app_lang("email") ?>", "class": "w20p"},
                 {visible: visibleContact, title: "<?php echo app_lang("phone") ?>", "class": "w15p"}
 <?php echo $custom_field_headers; ?>,
-                {visible: visibleDelete, title: '<i data-feather="menu" class="icon-16"></i>', "class": "text-center option w100"}
+                {visible: visibleOption, title: '<i data-feather="menu" class="icon-16"></i>', "class": "text-center option w100"}
             ],
             printColumns: combineCustomFieldsColumns([1, 2, 3, 4], '<?php echo $custom_field_headers; ?>'),
             xlsColumns: combineCustomFieldsColumns([1, 2, 3, 4], '<?php echo $custom_field_headers; ?>')
